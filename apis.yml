@@ -1,0 +1,94 @@
+aid: lokalise
+url: https://raw.githubusercontent.com/api-evangelist/lokalise/refs/heads/main/apis.yml
+name: Lokalise
+kind: company
+description: >-
+  Lokalise is a translation management system (TMS) for software, mobile, web,
+  games, and documentation. It pairs collaborative localization workflows with
+  AI machine translation and a full-coverage REST API (APIv2) that exposes
+  projects, keys, translations, files, contributors, screenshots, snapshots,
+  tasks, branches, glossaries, webhooks, and payments. Official SDKs are
+  maintained for Node.js, Python, Ruby, PHP, Go, Java, .NET, and Elixir.
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+tags:
+  - Localization
+  - Translation
+  - TMS
+  - AI Machine Translation
+  - REST
+  - Developer Tools
+created: '2026-05-23'
+modified: '2026-05-23'
+specificationVersion: '0.19'
+apis:
+  - aid: lokalise:api-v2
+    name: Lokalise API v2
+    description: >-
+      Full-coverage REST API for the Lokalise TMS. Resources include projects,
+      keys, translations, contributors, files, comments, screenshots, snapshots,
+      teams, team users, team user groups, branches, languages, tasks,
+      glossaries, webhooks, payments, and orders. Authentication is via API
+      token in the X-Api-Token header or OAuth 2.
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://developers.lokalise.com/
+    baseURL: https://api.lokalise.com/api2
+    tags:
+      - REST
+      - Projects
+      - Keys
+      - Translations
+      - Files
+      - Contributors
+      - Screenshots
+      - Webhooks
+    properties:
+      - type: Documentation
+        url: https://developers.lokalise.com/
+      - type: LegacyDocs
+        url: https://docs.lokalise.com/en/articles/1400695-lokalise-api-v2
+      - type: Blog
+        url: https://lokalise.com/blog/lokalise-api/
+      - type: SDK
+        title: Node.js
+        url: https://github.com/lokalise/node-lokalise-api
+      - type: SDK
+        title: Python
+        url: https://github.com/lokalise/python-lokalise-api
+      - type: SDK
+        title: Ruby
+        url: https://github.com/lokalise/ruby-lokalise-api
+      - type: SDK
+        title: PHP
+        url: https://github.com/lokalise/php-lokalise-api
+      - type: SDK
+        title: Go
+        url: https://github.com/lokalise/go-lokalise-api
+      - type: SDK
+        title: Java
+        url: https://github.com/lokalise/java-lokalise-api
+      - type: SDK
+        title: .NET
+        url: https://github.com/lokalise/dotnet-lokalise-api
+      - type: SDK
+        title: Elixir
+        url: https://github.com/lokalise/elixir-lokalise-api
+common:
+  - type: Website
+    url: https://lokalise.com/
+  - type: Documentation
+    url: https://developers.lokalise.com/
+  - type: Blog
+    url: https://lokalise.com/blog/
+  - type: GitHub
+    url: https://github.com/lokalise
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/lokalise
+  - type: Plans
+    url: plans/lokalise-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/lokalise-rate-limits.yml
+  - type: FinOps
+    url: finops/lokalise-finops.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
