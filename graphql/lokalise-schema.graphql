@@ -1,0 +1,1099 @@
+"""
+Lokalise GraphQL Schema
+Conceptual schema derived from the Lokalise REST API v2.
+Covers project management, key management, translations, files, contributors,
+screenshots, snapshots, tasks, branches, glossaries, webhooks, orders, and payments.
+"""
+
+# ─── Scalars ──────────────────────────────────────────────────────────────────
+
+scalar DateTime
+scalar JSON
+scalar Upload
+
+# ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum ProjectType {
+  localization_files
+  paged_documents
+  marketing_materials
+  other
+}
+
+enum TranslationStatus {
+  reviewed
+  unreviewed
+  auto_translated
+  machine_translated
+}
+
+enum TaskStatus {
+  created
+  in_progress
+  completed
+  cancelled
+}
+
+enum TaskType {
+  translation
+  review
+}
+
+enum OrderStatus {
+  in_queue
+  in_progress
+  completed
+  failed
+  cancelled
+}
+
+enum BranchMergeStrategy {
+  main
+  branch
+}
+
+enum WebhookEvent {
+  project_imported
+  project_exported
+  project_snapshot
+  project_branch_added
+  project_branch_deleted
+  project_branch_merged
+  project_languages_added
+  project_key_added
+  project_keys_added
+  project_key_modified
+  project_keys_modified
+  project_key_deleted
+  project_keys_deleted
+  project_translation_updated
+  project_translations_updated
+  project_translation_proofread
+  project_contributor_added
+  project_contributor_deleted
+  project_task_created
+  project_task_closed
+  project_task_deleted
+  project_task_language_closed
+  team_order_created
+  team_order_deleted
+  team_order_processed
+}
+
+enum FileFormat {
+  json
+  xml
+  xliff
+  po
+  pot
+  strings
+  stringsdict
+  csv
+  arb
+  ios_sdk
+  android_sdk
+  yaml
+  php
+  resx
+  toml
+  properties
+}
+
+enum GlossaryTermPartOfSpeech {
+  noun
+  verb
+  adjective
+  adverb
+  other
+}
+
+enum ContributorRole {
+  owner
+  admin
+  editor
+  translator
+  reviewer
+}
+
+enum LanguageDirection {
+  ltr
+  rtl
+}
+
+enum SnapshotAction {
+  create
+  restore
+}
+
+# ─── Core Object Types ────────────────────────────────────────────────────────
+
+"""A Lokalise team (organization)."""
+type Team {
+  id: ID!
+  name: String!
+  plan: String
+  quota_usage: TeamQuotaUsage
+  quota_allowed: TeamQuotaAllowed
+  created_at: DateTime!
+  users: [TeamUser!]
+  user_groups: [TeamUserGroup!]
+}
+
+"""Usage metrics for a team's quota."""
+type TeamQuotaUsage {
+  users: Int!
+  keys: Int!
+  projects: Int!
+  mau: Int!
+}
+
+"""Allowed quota limits for a team."""
+type TeamQuotaAllowed {
+  users: Int
+  keys: Int
+  projects: Int
+  mau: Int
+}
+
+"""A user belonging to a team."""
+type TeamUser {
+  user_id: ID!
+  email: String!
+  fullname: String!
+  created_at: DateTime!
+  role: ContributorRole!
+}
+
+"""A group of team users with shared permissions."""
+type TeamUserGroup {
+  group_id: ID!
+  name: String!
+  permissions: TeamUserGroupPermissions!
+  created_at: DateTime!
+  team_id: ID!
+  projects: [String!]
+  members: [ID!]
+}
+
+"""Permission set for a team user group."""
+type TeamUserGroupPermissions {
+  is_admin: Boolean!
+  is_reviewer: Boolean!
+  is_editor: Boolean!
+  admin_rights: [String!]
+  languages: TeamUserGroupLanguagePermissions
+}
+
+"""Language-level permission settings for a user group."""
+type TeamUserGroupLanguagePermissions {
+  reference: [String!]
+  contributable: [String!]
+}
+
+"""A localization project within Lokalise."""
+type Project {
+  project_id: ID!
+  project_type: ProjectType!
+  name: String!
+  description: String
+  created_at: DateTime!
+  created_by: Int!
+  created_by_email: String!
+  team_id: ID!
+  base_language_id: Int!
+  base_language_iso: String!
+  settings: ProjectSettings
+  statistics: ProjectStatistics
+  keys(page: Int, limit: Int): [Key!]
+  languages: [Language!]
+  contributors: [Contributor!]
+  files: [File!]
+  snapshots: [Snapshot!]
+  branches: [Branch!]
+  tasks(filter_status: TaskStatus): [Task!]
+  webhooks: [Webhook!]
+  screenshots: [Screenshot!]
+  glossary_terms: [GlossaryTerm!]
+}
+
+"""Configuration settings for a project."""
+type ProjectSettings {
+  per_platform_key_names: Boolean!
+  reviewing: Boolean!
+  auto_toggle_unverified: Boolean!
+  offline_translation: Boolean!
+  key_editing: Boolean!
+  inline_machine_translations: Boolean!
+  branching: Boolean!
+  segmentation: Boolean!
+  custom_translation_statuses: Boolean!
+  custom_translation_statuses_allow_multiple: Boolean!
+}
+
+"""Aggregated statistics for a project."""
+type ProjectStatistics {
+  progress_total: Float!
+  keys_total: Int!
+  team: Int!
+  role_id: Int!
+  languages: [LanguageStatistics!]
+}
+
+"""Translation progress for a single language in a project."""
+type LanguageStatistics {
+  language_id: Int!
+  language_iso: String!
+  progress: Float!
+  words_to_do: Int!
+}
+
+"""A translation key within a project."""
+type Key {
+  key_id: ID!
+  created_at: DateTime!
+  key_name: KeyName!
+  filenames: KeyFilenames
+  description: String
+  platforms: [String!]!
+  tags: [String!]
+  comments: [Comment!]
+  screenshots: [Screenshot!]
+  translations: [Translation!]
+  is_plural: Boolean!
+  plural_name: String
+  is_hidden: Boolean!
+  is_archived: Boolean!
+  context: String
+  base_words: Int!
+  char_limit: Int
+  custom_attributes: JSON
+}
+
+"""Platform-specific key names."""
+type KeyName {
+  ios: String
+  android: String
+  web: String
+  other: String
+}
+
+"""Platform-specific filenames associated with a key."""
+type KeyFilenames {
+  ios: String
+  android: String
+  web: String
+  other: String
+}
+
+"""A translation value for a specific key and language."""
+type Translation {
+  translation_id: ID!
+  key_id: ID!
+  language_iso: String!
+  modified_at: DateTime
+  modified_by: Int
+  modified_by_email: String
+  value: String
+  plural_forms: [PluralForm!]
+  is_reviewed: Boolean!
+  reviewed_by: Int
+  words: Int
+  task_id: Int
+  segment_number: Int
+  custom_translation_status_ids: [Int!]
+  translation_status: TranslationStatus!
+}
+
+"""A plural form value within a translation."""
+type PluralForm {
+  form: String!
+  value: String!
+}
+
+"""A supported language in Lokalise."""
+type Language {
+  lang_id: ID!
+  lang_iso: String!
+  lang_name: String!
+  is_rtl: Boolean!
+  plural_forms: [String!]
+}
+
+"""A contributor (team member) on a project."""
+type Contributor {
+  user_id: ID!
+  email: String!
+  fullname: String!
+  created_at: DateTime!
+  is_admin: Boolean!
+  is_reviewer: Boolean!
+  languages: [ContributorLanguage!]
+  admin_rights: [String!]
+}
+
+"""Language access permissions for a contributor."""
+type ContributorLanguage {
+  lang_id: Int!
+  lang_iso: String!
+  lang_name: String!
+  is_writable: Boolean!
+}
+
+"""A localization file associated with a project."""
+type File {
+  file_id: ID!
+  filename: String!
+  key_count: Int!
+}
+
+"""A comment on a translation key."""
+type Comment {
+  comment_id: ID!
+  key_id: Int!
+  comment: String!
+  added_by: Int!
+  added_by_email: String!
+  added_at: DateTime!
+}
+
+"""A screenshot providing visual context for keys."""
+type Screenshot {
+  screenshot_id: ID!
+  title: String
+  description: String
+  screenshot_tags: [String!]
+  width: Int
+  height: Int
+  url: String!
+  created_at: DateTime!
+  keys: [ScreenshotKey!]
+}
+
+"""A key tagged within a screenshot with positional data."""
+type ScreenshotKey {
+  key_id: Int!
+  coordinates: ScreenshotCoordinates
+}
+
+"""Bounding-box coordinates of a key within a screenshot."""
+type ScreenshotCoordinates {
+  left: Float!
+  top: Float!
+  width: Float!
+  height: Float!
+}
+
+"""A project snapshot (point-in-time backup)."""
+type Snapshot {
+  snapshot_id: ID!
+  title: String!
+  created_at: DateTime!
+  created_by: Int!
+  created_by_email: String!
+  project_id: String!
+}
+
+"""A branch derived from a project for parallel work."""
+type Branch {
+  branch_id: ID!
+  name: String!
+  created_at: DateTime!
+  created_by: Int!
+  created_by_email: String!
+}
+
+"""A merge result from combining two branches."""
+type BranchMergeResult {
+  project_id: String!
+  branch_id: Int!
+  merged_at: DateTime!
+}
+
+"""A translation or review task in a project."""
+type Task {
+  task_id: ID!
+  title: String!
+  description: String
+  status: TaskStatus!
+  progress: Int!
+  due_date: DateTime
+  keys_count: Int!
+  words_count: Int!
+  created_at: DateTime!
+  created_by: Int!
+  created_by_email: String!
+  source_language_iso: String!
+  languages: [TaskLanguage!]!
+  auto_close_languages: Boolean!
+  auto_close_task: Boolean!
+  auto_close_items: Boolean!
+  completed_at: DateTime
+  completed_by: Int
+  completed_by_email: String
+  do_lock_translations: Boolean!
+  task_type: TaskType!
+  parent_task_id: Int
+  closing_tags: [String!]
+  topics: [String!]
+  translation_memory_filled: Boolean!
+}
+
+"""Language-level details for a task."""
+type TaskLanguage {
+  language_iso: String!
+  users: [TaskUser!]!
+  groups: [TaskGroup!]!
+  completed: Boolean!
+  completed_at: DateTime
+  completed_by: Int
+}
+
+"""A user assigned to a task language."""
+type TaskUser {
+  user_id: Int!
+  email: String!
+  fullname: String!
+  is_reviewer: Boolean!
+  is_manager: Boolean!
+  rejected_reason: String
+  type: String!
+}
+
+"""A group assigned to a task language."""
+type TaskGroup {
+  id: Int!
+  name: String!
+  is_reviewer: Boolean!
+  is_manager: Boolean!
+  type: String!
+}
+
+"""A webhook registered on a project."""
+type Webhook {
+  webhook_id: ID!
+  url: String!
+  secret: String
+  events: [WebhookEvent!]!
+  event_lang_map: [WebhookEventLangMapping!]
+  created_at: DateTime!
+}
+
+"""Maps a webhook event to specific language ISOs."""
+type WebhookEventLangMapping {
+  event: WebhookEvent!
+  lang_iso_codes: [String!]!
+}
+
+"""A glossary term for consistent terminology."""
+type GlossaryTerm {
+  term_id: ID!
+  term: String!
+  description: String
+  caseSensitive: Boolean!
+  translatable: Boolean!
+  forbidden: Boolean!
+  part_of_speech: GlossaryTermPartOfSpeech
+  tags: [String!]
+  created_at: DateTime!
+  modified_at: DateTime!
+  translations: [GlossaryTermTranslation!]
+}
+
+"""A translation of a glossary term in a target language."""
+type GlossaryTermTranslation {
+  lang_iso: String!
+  translation: String!
+  description: String
+}
+
+"""A professional translation order."""
+type Order {
+  order_id: ID!
+  project_id: String!
+  card_id: Int!
+  status: OrderStatus!
+  created_at: DateTime!
+  created_by: Int!
+  created_by_email: String!
+  source_language_iso: String!
+  target_language_isos: [String!]!
+  keys: [Int!]!
+  provider_slug: String!
+  translation_tier: Int!
+  is_saved_to_translation_memory: Boolean!
+  total: Float!
+  currency: String!
+}
+
+"""A payment card stored for orders."""
+type PaymentCard {
+  card_id: ID!
+  last4: String!
+  brand: String!
+  created_at: DateTime!
+}
+
+"""A custom translation status label."""
+type CustomTranslationStatus {
+  status_id: ID!
+  title: String!
+  color: String!
+}
+
+"""A segment of a translation (for segmented projects)."""
+type TranslationSegment {
+  segment_number: Int!
+  value: String!
+  is_reviewed: Boolean!
+  reviewed_by: Int
+  reviewed_at: DateTime
+}
+
+"""A provider available for professional translation orders."""
+type TranslationProvider {
+  provider_slug: String!
+  name: String!
+  tiers: [TranslationProviderTier!]!
+  pairs: [LanguagePair!]!
+}
+
+"""A pricing tier offered by a translation provider."""
+type TranslationProviderTier {
+  tier_id: Int!
+  title: String!
+}
+
+"""A language pair supported by a translation provider."""
+type LanguagePair {
+  tier_id: Int!
+  from_lang_iso: String!
+  to_lang_iso: String!
+  flat_rate_per_word: Float!
+  currency: String!
+}
+
+"""Result of a bulk-operation on keys."""
+type BulkActionResult {
+  project_id: String!
+  keys_updated: Int!
+  branch: String
+}
+
+"""Result of uploading a file to a project."""
+type FileUploadResult {
+  project_id: String!
+  filename: String!
+  branch: String
+  process: QueuedProcess
+}
+
+"""Result of exporting (downloading) files from a project."""
+type FileExportResult {
+  project_id: String!
+  bundle_url: String!
+  branch: String
+}
+
+"""A background process tracking an async operation."""
+type QueuedProcess {
+  process_id: String!
+  type: String!
+  status: String!
+  message: String
+  created_by: Int!
+  created_by_email: String!
+  created_at: DateTime!
+  details: JSON
+}
+
+"""Pagination information for list results."""
+type PageInfo {
+  total_count: Int!
+  page: Int!
+  per_page: Int!
+}
+
+# ─── Input Types ──────────────────────────────────────────────────────────────
+
+"""Input for creating a new project."""
+input CreateProjectInput {
+  name: String!
+  description: String
+  languages: [ProjectLanguageInput!]
+  base_lang_iso: String
+  project_type: ProjectType
+  team_id: Int
+}
+
+"""Input for updating an existing project."""
+input UpdateProjectInput {
+  name: String
+  description: String
+}
+
+"""Input for adding a language to a project."""
+input ProjectLanguageInput {
+  lang_iso: String!
+  custom_iso: String
+  custom_name: String
+  custom_plural_forms: [String!]
+}
+
+"""Input for creating a new translation key."""
+input CreateKeyInput {
+  key_name: KeyNameInput!
+  description: String
+  platforms: [String!]!
+  filenames: KeyFilenamesInput
+  tags: [String!]
+  translations: [TranslationInput!]
+  is_plural: Boolean
+  plural_name: String
+  is_hidden: Boolean
+  is_archived: Boolean
+  context: String
+  char_limit: Int
+  custom_attributes: JSON
+}
+
+"""Input for platform-specific key names."""
+input KeyNameInput {
+  ios: String
+  android: String
+  web: String
+  other: String
+}
+
+"""Input for platform-specific filenames."""
+input KeyFilenamesInput {
+  ios: String
+  android: String
+  web: String
+  other: String
+}
+
+"""Input for creating or updating a translation."""
+input TranslationInput {
+  language_iso: String!
+  translation: String
+  is_reviewed: Boolean
+  is_unverified: Boolean
+  custom_translation_status_ids: [Int!]
+}
+
+"""Input for creating a contributor on a project."""
+input CreateContributorInput {
+  email: String!
+  fullname: String
+  is_admin: Boolean
+  is_reviewer: Boolean
+  languages: [ContributorLanguageInput!]
+  admin_rights: [String!]
+}
+
+"""Input for contributor language permissions."""
+input ContributorLanguageInput {
+  lang_iso: String!
+  is_writable: Boolean!
+}
+
+"""Input for creating a task."""
+input CreateTaskInput {
+  title: String!
+  description: String
+  due_date: DateTime
+  keys: [Int!]!
+  source_language_iso: String!
+  languages: [TaskLanguageInput!]!
+  auto_close_languages: Boolean
+  auto_close_task: Boolean
+  auto_close_items: Boolean
+  do_lock_translations: Boolean
+  task_type: TaskType
+  parent_task_id: Int
+  closing_tags: [String!]
+}
+
+"""Input for assigning a language within a task."""
+input TaskLanguageInput {
+  language_iso: String!
+  users: [Int!]
+  groups: [Int!]
+}
+
+"""Input for creating a webhook."""
+input CreateWebhookInput {
+  url: String!
+  events: [WebhookEvent!]!
+  event_lang_map: [WebhookEventLangMappingInput!]
+}
+
+"""Input for mapping events to languages in a webhook."""
+input WebhookEventLangMappingInput {
+  event: WebhookEvent!
+  lang_iso_codes: [String!]!
+}
+
+"""Input for creating a screenshot."""
+input CreateScreenshotInput {
+  title: String
+  description: String
+  body: String!
+  tags: [String!]
+  key_ids: [Int!]
+}
+
+"""Input for uploading a file to a project."""
+input UploadFileInput {
+  filename: String!
+  data: String!
+  lang_iso: String!
+  format: FileFormat!
+  convert_placeholder: Boolean
+  skip_detect_lang_iso: Boolean
+  tag_inserted_keys: Boolean
+  tag_updated_keys: Boolean
+  tag_skipped_keys: Boolean
+  replace_modified: Boolean
+  slashn_to_linebreak: Boolean
+  keys_to_values: Boolean
+  distinguish_by_file: Boolean
+  apply_tm: Boolean
+  hidden_from_contributors: Boolean
+  cleanup_mode: Boolean
+  custom_translation_status_inserted_keys: [Int!]
+  custom_translation_status_updated_keys: [Int!]
+  custom_translation_status_skipped_keys: [Int!]
+}
+
+"""Input for exporting (downloading) files from a project."""
+input DownloadFileInput {
+  format: FileFormat!
+  original_filenames: Boolean
+  bundle_structure: String
+  directory_prefix: String
+  all_platforms: Boolean
+  lang_iso: String
+  export_empty: String
+  include_comments: Boolean
+  include_description: Boolean
+  include_pids: [String!]
+  tags: [String!]
+  export_sort: String
+  export_null_as: String
+  java_properties_encoding: String
+  language_mapping: JSON
+  trigger_compile_on_download: Boolean
+  replace_breaks: Boolean
+  escape_percent: Boolean
+  webhook_url: String
+  branch: String
+}
+
+"""Input for creating a translation order."""
+input CreateOrderInput {
+  project_id: String!
+  card_id: Int!
+  source_language_iso: String!
+  target_language_isos: [String!]!
+  keys: [Int!]!
+  provider_slug: String!
+  translation_tier: Int!
+  is_saved_to_translation_memory: Boolean
+}
+
+"""Input for creating a glossary term."""
+input CreateGlossaryTermInput {
+  term: String!
+  description: String
+  caseSensitive: Boolean
+  translatable: Boolean
+  forbidden: Boolean
+  part_of_speech: GlossaryTermPartOfSpeech
+  tags: [String!]
+  translations: [GlossaryTermTranslationInput!]
+}
+
+"""Input for a glossary term translation."""
+input GlossaryTermTranslationInput {
+  lang_iso: String!
+  translation: String!
+  description: String
+}
+
+"""Input for creating a branch."""
+input CreateBranchInput {
+  name: String!
+}
+
+"""Input for merging a branch."""
+input MergeBranchInput {
+  force_conflict_resolve_using: BranchMergeStrategy
+  target_branch_id: Int
+}
+
+# ─── Query Type ───────────────────────────────────────────────────────────────
+
+type Query {
+  """List all teams the authenticated user belongs to."""
+  teams(page: Int, limit: Int): [Team!]!
+
+  """Fetch a single team by ID."""
+  team(team_id: ID!): Team
+
+  """List users in a team."""
+  teamUsers(team_id: ID!, page: Int, limit: Int): [TeamUser!]!
+
+  """Fetch a single team user."""
+  teamUser(team_id: ID!, user_id: ID!): TeamUser
+
+  """List user groups in a team."""
+  teamUserGroups(team_id: ID!, page: Int, limit: Int): [TeamUserGroup!]!
+
+  """Fetch a single team user group."""
+  teamUserGroup(team_id: ID!, group_id: ID!): TeamUserGroup
+
+  """List all projects for the authenticated user or team."""
+  projects(team_id: ID, page: Int, limit: Int): [Project!]!
+
+  """Fetch a single project by ID."""
+  project(project_id: ID!): Project
+
+  """List keys in a project."""
+  keys(project_id: ID!, page: Int, limit: Int, filter_tags: [String!], filter_platforms: [String!], include_comments: Boolean, include_screenshots: Boolean, include_translations: Boolean): [Key!]!
+
+  """Fetch a single key."""
+  key(project_id: ID!, key_id: ID!): Key
+
+  """List translations in a project."""
+  translations(project_id: ID!, page: Int, limit: Int, disable_references: Boolean, filter_lang_id: Int, filter_is_reviewed: Boolean, filter_unverified: Boolean, filter_untranslated: Boolean, filter_q: String, filter_q_and: String): [Translation!]!
+
+  """Fetch a single translation."""
+  translation(project_id: ID!, translation_id: ID!): Translation
+
+  """List languages in a project."""
+  languages(project_id: ID!): [Language!]!
+
+  """List all system languages supported by Lokalise."""
+  systemLanguages(page: Int, limit: Int): [Language!]!
+
+  """List contributors for a project."""
+  contributors(project_id: ID!, page: Int, limit: Int): [Contributor!]!
+
+  """Fetch a single contributor."""
+  contributor(project_id: ID!, user_id: ID!): Contributor
+
+  """List files in a project."""
+  files(project_id: ID!, page: Int, limit: Int, filter_filename: String): [File!]!
+
+  """List comments on a key."""
+  keyComments(project_id: ID!, key_id: ID!, page: Int, limit: Int): [Comment!]!
+
+  """List all project-level comments."""
+  projectComments(project_id: ID!, page: Int, limit: Int): [Comment!]!
+
+  """List screenshots in a project."""
+  screenshots(project_id: ID!, page: Int, limit: Int): [Screenshot!]!
+
+  """Fetch a single screenshot."""
+  screenshot(project_id: ID!, screenshot_id: ID!): Screenshot
+
+  """List snapshots for a project."""
+  snapshots(project_id: ID!, page: Int, limit: Int): [Snapshot!]!
+
+  """List branches in a project."""
+  branches(project_id: ID!): [Branch!]!
+
+  """Fetch a single branch."""
+  branch(project_id: ID!, branch_id: ID!): Branch
+
+  """List tasks in a project."""
+  tasks(project_id: ID!, page: Int, limit: Int, filter_title: String, filter_statuses: [TaskStatus!]): [Task!]!
+
+  """Fetch a single task."""
+  task(project_id: ID!, task_id: ID!): Task
+
+  """List webhooks for a project."""
+  webhooks(project_id: ID!): [Webhook!]!
+
+  """Fetch a single webhook."""
+  webhook(project_id: ID!, webhook_id: ID!): Webhook
+
+  """List glossary terms for a project."""
+  glossaryTerms(project_id: ID!, page: Int, limit: Int): [GlossaryTerm!]!
+
+  """Fetch a single glossary term."""
+  glossaryTerm(project_id: ID!, term_id: ID!): GlossaryTerm
+
+  """List orders for a team."""
+  orders(team_id: ID!, page: Int, limit: Int): [Order!]!
+
+  """Fetch a single order."""
+  order(team_id: ID!, order_id: ID!): Order
+
+  """List payment cards for a team."""
+  paymentCards(team_id: ID!): [PaymentCard!]!
+
+  """List custom translation statuses for a project."""
+  customTranslationStatuses(project_id: ID!): [CustomTranslationStatus!]!
+
+  """Fetch a single custom translation status."""
+  customTranslationStatus(project_id: ID!, status_id: ID!): CustomTranslationStatus
+
+  """List available translation providers."""
+  translationProviders(team_id: ID!, page: Int, limit: Int): [TranslationProvider!]!
+
+  """List queued processes for a project."""
+  queuedProcesses(project_id: ID!): [QueuedProcess!]!
+
+  """Fetch a single queued process."""
+  queuedProcess(project_id: ID!, process_id: ID!): QueuedProcess
+}
+
+# ─── Mutation Type ────────────────────────────────────────────────────────────
+
+type Mutation {
+  """Create a new project."""
+  createProject(input: CreateProjectInput!): Project!
+
+  """Update an existing project."""
+  updateProject(project_id: ID!, input: UpdateProjectInput!): Project!
+
+  """Delete a project."""
+  deleteProject(project_id: ID!): Boolean!
+
+  """Empty a project (remove all keys and translations)."""
+  emptyProject(project_id: ID!): Boolean!
+
+  """Add languages to a project."""
+  addProjectLanguages(project_id: ID!, languages: [ProjectLanguageInput!]!): [Language!]!
+
+  """Delete a language from a project."""
+  deleteProjectLanguage(project_id: ID!, lang_id: Int!): Boolean!
+
+  """Create a new key in a project."""
+  createKey(project_id: ID!, input: CreateKeyInput!): Key!
+
+  """Bulk create keys in a project."""
+  bulkCreateKeys(project_id: ID!, inputs: [CreateKeyInput!]!): BulkActionResult!
+
+  """Update a key."""
+  updateKey(project_id: ID!, key_id: ID!, input: CreateKeyInput!): Key!
+
+  """Bulk update keys."""
+  bulkUpdateKeys(project_id: ID!, key_ids: [Int!]!, input: CreateKeyInput!): BulkActionResult!
+
+  """Delete a key."""
+  deleteKey(project_id: ID!, key_id: ID!): Boolean!
+
+  """Bulk delete keys."""
+  bulkDeleteKeys(project_id: ID!, key_ids: [Int!]!): BulkActionResult!
+
+  """Update a translation."""
+  updateTranslation(project_id: ID!, translation_id: ID!, input: TranslationInput!): Translation!
+
+  """Add a contributor to a project."""
+  createContributor(project_id: ID!, input: CreateContributorInput!): Contributor!
+
+  """Remove a contributor from a project."""
+  deleteContributor(project_id: ID!, user_id: ID!): Boolean!
+
+  """Upload a file to a project."""
+  uploadFile(project_id: ID!, input: UploadFileInput!): FileUploadResult!
+
+  """Export/download files from a project."""
+  downloadFiles(project_id: ID!, input: DownloadFileInput!): FileExportResult!
+
+  """Delete a file from a project."""
+  deleteFile(project_id: ID!, file_id: ID!): Boolean!
+
+  """Add a comment to a key."""
+  createKeyComment(project_id: ID!, key_id: ID!, comment: String!): Comment!
+
+  """Delete a comment."""
+  deleteKeyComment(project_id: ID!, key_id: ID!, comment_id: ID!): Boolean!
+
+  """Create a screenshot."""
+  createScreenshot(project_id: ID!, input: CreateScreenshotInput!): Screenshot!
+
+  """Update a screenshot."""
+  updateScreenshot(project_id: ID!, screenshot_id: ID!, input: CreateScreenshotInput!): Screenshot!
+
+  """Delete a screenshot."""
+  deleteScreenshot(project_id: ID!, screenshot_id: ID!): Boolean!
+
+  """Create a snapshot of a project."""
+  createSnapshot(project_id: ID!, title: String!): Snapshot!
+
+  """Restore a project from a snapshot."""
+  restoreSnapshot(project_id: ID!, snapshot_id: ID!): Project!
+
+  """Delete a snapshot."""
+  deleteSnapshot(project_id: ID!, snapshot_id: ID!): Boolean!
+
+  """Create a branch."""
+  createBranch(project_id: ID!, input: CreateBranchInput!): Branch!
+
+  """Merge a branch into another branch or main."""
+  mergeBranch(project_id: ID!, branch_id: ID!, input: MergeBranchInput!): BranchMergeResult!
+
+  """Delete a branch."""
+  deleteBranch(project_id: ID!, branch_id: ID!): Boolean!
+
+  """Create a task."""
+  createTask(project_id: ID!, input: CreateTaskInput!): Task!
+
+  """Update a task."""
+  updateTask(project_id: ID!, task_id: ID!, input: CreateTaskInput!): Task!
+
+  """Delete a task."""
+  deleteTask(project_id: ID!, task_id: ID!): Boolean!
+
+  """Close a task."""
+  closeTask(project_id: ID!, task_id: ID!): Task!
+
+  """Create a webhook."""
+  createWebhook(project_id: ID!, input: CreateWebhookInput!): Webhook!
+
+  """Update a webhook."""
+  updateWebhook(project_id: ID!, webhook_id: ID!, input: CreateWebhookInput!): Webhook!
+
+  """Delete a webhook."""
+  deleteWebhook(project_id: ID!, webhook_id: ID!): Boolean!
+
+  """Regenerate the webhook secret."""
+  regenerateWebhookSecret(project_id: ID!, webhook_id: ID!): Webhook!
+
+  """Create a glossary term."""
+  createGlossaryTerm(project_id: ID!, input: CreateGlossaryTermInput!): GlossaryTerm!
+
+  """Update a glossary term."""
+  updateGlossaryTerm(project_id: ID!, term_id: ID!, input: CreateGlossaryTermInput!): GlossaryTerm!
+
+  """Delete a glossary term."""
+  deleteGlossaryTerm(project_id: ID!, term_id: ID!): Boolean!
+
+  """Place a translation order."""
+  createOrder(team_id: ID!, input: CreateOrderInput!): Order!
+
+  """Create a custom translation status."""
+  createCustomTranslationStatus(project_id: ID!, title: String!, color: String!): CustomTranslationStatus!
+
+  """Update a custom translation status."""
+  updateCustomTranslationStatus(project_id: ID!, status_id: ID!, title: String, color: String): CustomTranslationStatus!
+
+  """Delete a custom translation status."""
+  deleteCustomTranslationStatus(project_id: ID!, status_id: ID!): Boolean!
+
+  """Add a team user group to a project."""
+  addGroupToProject(team_id: ID!, group_id: ID!, project_ids: [String!]!): TeamUserGroup!
+
+  """Remove a team user group from a project."""
+  removeGroupFromProject(team_id: ID!, group_id: ID!, project_ids: [String!]!): TeamUserGroup!
+
+  """Add members to a team user group."""
+  addMembersToGroup(team_id: ID!, group_id: ID!, user_ids: [Int!]!): TeamUserGroup!
+
+  """Remove members from a team user group."""
+  removeMembersFromGroup(team_id: ID!, group_id: ID!, user_ids: [Int!]!): TeamUserGroup!
+}
