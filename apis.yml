@@ -46,28 +46,28 @@ apis:
     url: https://docs.lokalise.com/en/articles/1400695-lokalise-api-v2
   - type: Blog
     url: https://lokalise.com/blog/lokalise-api/
-  - type: SDK
+  - type: SDKs
     title: Node.js
     url: https://github.com/lokalise/node-lokalise-api
-  - type: SDK
+  - type: SDKs
     title: Python
     url: https://github.com/lokalise/python-lokalise-api
-  - type: SDK
+  - type: SDKs
     title: Ruby
     url: https://github.com/lokalise/ruby-lokalise-api
-  - type: SDK
+  - type: SDKs
     title: PHP
     url: https://github.com/lokalise/php-lokalise-api
-  - type: SDK
+  - type: SDKs
     title: Go
     url: https://github.com/lokalise/go-lokalise-api
-  - type: SDK
+  - type: SDKs
     title: Java
     url: https://github.com/lokalise/java-lokalise-api
-  - type: SDK
+  - type: SDKs
     title: .NET
     url: https://github.com/lokalise/dotnet-lokalise-api
-  - type: SDK
+  - type: SDKs
     title: Elixir
     url: https://github.com/lokalise/elixir-lokalise-api
   - url: graphql/lokalise-graphql.md
@@ -89,7 +89,7 @@ common:
   url: rate-limits/lokalise-rate-limits.yml
 - type: FinOps
   url: finops/lokalise-finops.yml
-- type: LLMsTxt
+- type: LlmsText
   url: https://developers.lokalise.com/llms.txt
 maintainers:
 - FN: Kin Lane

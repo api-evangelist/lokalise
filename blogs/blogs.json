@@ -3,23 +3,18 @@
   "feeds": [
     {
       "source": "https://lokalise.com/blog/",
-      "feed_url": "https://lokalise.com/blog/",
-      "title": "",
-      "saved": 0,
-      "method": "none"
+      "feed_url": "",
+      "saved": 1,
+      "method": "agent-scrape"
     },
     {
-      "source": "https://docs.lokalise.com/en/articles/1400695-lokalise-api-v2",
-      "feed_url": "https://docs.lokalise.com/en/articles/1400695-lokalise-api-v2",
-      "title": "",
+      "source": "https://lokalise.com/blog/lokalise-api/",
+      "feed_url": "",
       "saved": 0,
-      "method": "none"
-    },
-    {
-      "source": "https://developers.lokalise.com/",
-      "error": "HTTPError"
+      "method": "agent-scrape"
     }
   ],
-  "post_count": 0,
-  "fetched": "2026-06-14T20:42:17Z"
+  "post_count": 1,
+  "fetched": "2026-06-27T12:51:53Z",
+  "agent_pulled": "2026-06-27"
 }
