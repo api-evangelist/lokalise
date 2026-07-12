@@ -73,6 +73,10 @@ apis:
   - url: graphql/lokalise-graphql.md
     type: GraphQL
 common:
+- type: DomainSecurity
+  url: security/lokalise-domain-security.yml
+- type: Authentication
+  url: authentication/lokalise-authentication.yml
 - type: Website
   url: https://lokalise.com/
 - type: Documentation
