@@ -73,6 +73,8 @@ apis:
   - url: graphql/lokalise-graphql.md
     type: GraphQL
 common:
+- type: AgenticAccess
+  url: agentic-access/lokalise-agentic-access.yml
 - type: DomainSecurity
   url: security/lokalise-domain-security.yml
 - type: Authentication
