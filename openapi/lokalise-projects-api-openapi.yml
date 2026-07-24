@@ -1,0 +1,152 @@
+openapi: 3.1.0
+info:
+  title: Lokalise API v2 Files Projects API
+  description: 'Lokalise REST API (APIv2) for the Lokalise translation management system.
+
+    Resources include projects, keys, translations, files, contributors,
+
+    languages, tasks, snapshots, branches, glossaries, webhooks, and orders.
+
+    Authentication is via API token in the `X-Api-Token` header (OAuth 2 also supported).
+
+    '
+  version: '2.0'
+  contact:
+    name: Lokalise Developers
+    url: https://developers.lokalise.com/
+  license:
+    name: Proprietary
+    url: https://lokalise.com/legal/
+servers:
+- url: https://api.lokalise.com/api2
+  description: Lokalise API v2
+security:
+- ApiKeyAuth: []
+tags:
+- name: Projects
+paths:
+  /projects:
+    get:
+      tags:
+      - Projects
+      summary: List all projects
+      operationId: listProjects
+      parameters:
+      - name: filter_team_id
+        in: query
+        schema:
+          type: integer
+      - name: filter_names
+        in: query
+        schema:
+          type: string
+      - name: include_statistics
+        in: query
+        schema:
+          type: integer
+          enum:
+          - 0
+          - 1
+      - name: include_settings
+        in: query
+        schema:
+          type: integer
+          enum:
+          - 0
+          - 1
+      - name: limit
+        in: query
+        schema:
+          type: integer
+      - name: page
+        in: query
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: A list of projects
+          content:
+            application/json:
+              schema:
+                type: object
+    post:
+      tags:
+      - Projects
+      summary: Create a project
+      operationId: createProject
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - name
+              - team_id
+              properties:
+                name:
+                  type: string
+                team_id:
+                  type: integer
+                description:
+                  type: string
+                languages:
+                  type: array
+                  items:
+                    type: object
+                base_lang_iso:
+                  type: string
+                project_type:
+                  type: string
+                  enum:
+                  - localization_files
+                  - paged_documents
+                  - content_integration
+                  - marketing
+                  - marketing_integrations
+                is_segmentation_enabled:
+                  type: boolean
+      responses:
+        '200':
+          description: The created project
+          content:
+            application/json:
+              schema:
+                type: object
+  /projects/{project_id}:
+    parameters:
+    - name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      tags:
+      - Projects
+      summary: Retrieve a project
+      operationId: getProject
+      responses:
+        '200':
+          description: The project
+          content:
+            application/json:
+              schema:
+                type: object
+    delete:
+      tags:
+      - Projects
+      summary: Delete a project
+      operationId: deleteProject
+      responses:
+        '200':
+          description: Deletion confirmation
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Token

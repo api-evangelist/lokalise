@@ -1,0 +1,90 @@
+openapi: 3.1.0
+info:
+  title: Lokalise API v2 Files API
+  description: 'Lokalise REST API (APIv2) for the Lokalise translation management system.
+
+    Resources include projects, keys, translations, files, contributors,
+
+    languages, tasks, snapshots, branches, glossaries, webhooks, and orders.
+
+    Authentication is via API token in the `X-Api-Token` header (OAuth 2 also supported).
+
+    '
+  version: '2.0'
+  contact:
+    name: Lokalise Developers
+    url: https://developers.lokalise.com/
+  license:
+    name: Proprietary
+    url: https://lokalise.com/legal/
+servers:
+- url: https://api.lokalise.com/api2
+  description: Lokalise API v2
+security:
+- ApiKeyAuth: []
+tags:
+- name: Files
+paths:
+  /projects/{project_id}/files/upload:
+    parameters:
+    - name: project_id
+      in: path
+      required: true
+      schema:
+        type: string
+    post:
+      tags:
+      - Files
+      summary: Upload a file
+      operationId: uploadFile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - data
+              - filename
+              - lang_iso
+              properties:
+                data:
+                  type: string
+                  description: Base64-encoded file content
+                filename:
+                  type: string
+                lang_iso:
+                  type: string
+                convert_placeholders:
+                  type: boolean
+                detect_icu_plurals:
+                  type: boolean
+                tags:
+                  type: array
+                  items:
+                    type: string
+                replace_modified:
+                  type: boolean
+                apply_tm:
+                  type: boolean
+                cleanup_mode:
+                  type: boolean
+      responses:
+        '200':
+          description: Upload accepted
+          content:
+            application/json:
+              schema:
+                type: object
+        '202':
+          description: Processing in background
+          content:
+            application/json:
+              schema:
+                type: object
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Token
