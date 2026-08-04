@@ -1,0 +1,18 @@
+{
+  "provider": "lokalise",
+  "sources": [
+    "lokalise-files-api-openapi.yml",
+    "lokalise-keys-api-openapi.yml",
+    "lokalise-projects-api-openapi.yml"
+  ],
+  "outputs": [
+    "lokalise-files-api-openapi.yml",
+    "lokalise-keys-api-openapi.yml",
+    "lokalise-projects-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
