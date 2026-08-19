@@ -1,0 +1,229 @@
+{
+  "item": [
+    {
+      "id": "3e142832-4f40-4de5-8d4b-7be8daa659ab",
+      "name": "Files",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7502b2dc-1979-4c02-858a-411eaeffa9ab",
+          "name": "Upload a file",
+          "request": {
+            "name": "Upload a file",
+            "description": {},
+            "url": {
+              "path": [
+                "projects",
+                ":project_id",
+                "files",
+                "upload"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "project_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": \"<string>\",\n  \"filename\": \"<string>\",\n  \"lang_iso\": \"<string>\",\n  \"convert_placeholders\": \"<boolean>\",\n  \"detect_icu_plurals\": \"<boolean>\",\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"replace_modified\": \"<boolean>\",\n  \"apply_tm\": \"<boolean>\",\n  \"cleanup_mode\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "451c00ee-9445-4121-a337-21ddbcf24896",
+              "name": "Upload accepted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "files",
+                    "upload"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Api-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": \"<string>\",\n  \"filename\": \"<string>\",\n  \"lang_iso\": \"<string>\",\n  \"convert_placeholders\": \"<boolean>\",\n  \"detect_icu_plurals\": \"<boolean>\",\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"replace_modified\": \"<boolean>\",\n  \"apply_tm\": \"<boolean>\",\n  \"cleanup_mode\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "81d8d29b-67e1-47a7-a015-ea816fcb4fc4",
+              "name": "Processing in background",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "projects",
+                    ":project_id",
+                    "files",
+                    "upload"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "project_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-Api-Token",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": \"<string>\",\n  \"filename\": \"<string>\",\n  \"lang_iso\": \"<string>\",\n  \"convert_placeholders\": \"<boolean>\",\n  \"detect_icu_plurals\": \"<boolean>\",\n  \"tags\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"replace_modified\": \"<boolean>\",\n  \"apply_tm\": \"<boolean>\",\n  \"cleanup_mode\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.lokalise.com/api2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-Api-Token"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "3489c6d8-6282-411c-8a8c-ae28fc0fc199",
+    "name": "Lokalise API v2 Files API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Lokalise REST API (APIv2) for the Lokalise translation management system.\nResources include projects, keys, translations, files, contributors,\nlanguages, tasks, snapshots, branches, glossaries, webhooks, and orders.\nAuthentication is via API token in the `X-Api-Token` header (OAuth 2 also supported).\n\n\nContact Support:\n Name: Lokalise Developers",
+      "type": "text/plain"
+    }
+  }
+}

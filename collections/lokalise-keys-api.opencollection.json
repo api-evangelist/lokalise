@@ -1,0 +1,214 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Lokalise API v2 Files Keys API",
+    "version": "2.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-Api-Token",
+      "value": "{{X-Api-Token}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Keys",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.lokalise.com/api2/projects/:project_id/keys",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "disable_references",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "include_comments",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "include_screenshots",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "include_translations",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "filter_tags",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "filter_filenames",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "filter_keys",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "filter_key_ids",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "filter_platforms",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "filter_untranslated",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "filter_archived",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "pagination",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List all keys"
+        },
+        {
+          "info": {
+            "name": "Create keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.lokalise.com/api2/projects/:project_id/keys",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create keys"
+        },
+        {
+          "info": {
+            "name": "Retrieve a key",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.lokalise.com/api2/projects/:project_id/keys/:key_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "key_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve a key"
+        },
+        {
+          "info": {
+            "name": "Update a key",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.lokalise.com/api2/projects/:project_id/keys/:key_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "key_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a key"
+        },
+        {
+          "info": {
+            "name": "Delete a key",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.lokalise.com/api2/projects/:project_id/keys/:key_id",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "key_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a key"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
