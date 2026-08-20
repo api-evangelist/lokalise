@@ -45,6 +45,15 @@ apis:
   baseURL: https://api.lokalise.com/api2
   tags:
   - REST
+  - Project
+  - Keys
+  - Translations
+  - File
+  - Contributors
+  - Screenshots
+  - Webhook
+  tags_raw:
+  - REST
   - Projects
   - Keys
   - Translations
@@ -91,6 +100,8 @@ apis:
   humanURL: https://developers.lokalise.com/
   baseURL: https://api.lokalise.com/api2
   tags:
+  - File
+  tags_raw:
   - Files
   properties:
   - type: OpenAPI
@@ -111,6 +122,8 @@ apis:
   humanURL: https://developers.lokalise.com/
   baseURL: https://api.lokalise.com/api2
   tags:
+  - Project
+  tags_raw:
   - Projects
   properties:
   - type: OpenAPI
