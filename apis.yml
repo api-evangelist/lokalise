@@ -105,8 +105,6 @@ apis:
   - type: SDKs
     title: Elixir
     url: https://github.com/lokalise/elixir-lokalise-api
-  - url: graphql/lokalise-graphql.md
-    type: GraphQL
 - aid: lokalise:lokalise-files-api
   name: Lokalise Files API
   description: The Files API from Lokalise — 1 operation(s) for files.
