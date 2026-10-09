@@ -19,3 +19,39 @@ tools_note: No tool list captured. This manifest records a PROBED, reachable end
   not perform. Run signals/audit_mcp_authorship.py --probe to enumerate tools and settle platform-vs-provider
   authorship. Do NOT derive a tool list from the OpenAPI and store it here -- that is a candidate manifest,
   and it belongs under an X-MCPServerCandidate pointer.
+rfc9728:
+  endpoint: https://mcp.lokalise.com/mcp
+  metadata_url: https://mcp.lokalise.com/.well-known/oauth-protected-resource/mcp
+  discovered_via: WWW-Authenticate resource_metadata on an anonymous POST initialize
+  fetched: '2026-09-25'
+  http_status: 200
+  content_type: application/json
+  document:
+    resource: https://mcp.lokalise.com/mcp
+    authorization_servers:
+    - https://mcp.lokalise.com
+    scopes_supported:
+    - read_background_processes
+    - read_contributors
+    - read_files
+    - read_glossary
+    - read_keys
+    - read_languages
+    - read_projects
+    - read_screenshots
+    - read_tasks
+    - read_team_orders
+    - read_team_users
+    - read_translations
+    - write_contributors
+    - write_files
+    - write_glossary
+    - write_keys
+    - write_languages
+    - write_projects
+    - write_screenshots
+    - write_tasks
+    - write_team_orders
+    - write_translations
+    bearer_methods_supported:
+    - header
