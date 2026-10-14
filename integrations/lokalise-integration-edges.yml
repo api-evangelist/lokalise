@@ -1,0 +1,64 @@
+generated: '2026-10-14'
+method: searched
+checked:
+- https://github.com/marketplace?type=actions
+- https://marketplace.atlassian.com/
+- https://plugins.jetbrains.com/
+marketplace_apps: []
+edges:
+- partner_name: GitHub Marketplace (actions)
+  partner: github-actions
+  partner_match: aggregator
+  type: marketplace
+  marketplace: github-actions
+  channel: partner-built
+  relationship: platform-app
+  direction: third-party
+  evidence: https://github.com/marketplace/actions/pull-from-lokalise
+  listing_count: 3
+  apps:
+  - Pull from Lokalise
+  - Push to Lokalise
+  - Install Lokalise CLI
+  publisher_name: Lokalise
+  badges:
+  - Verified creator
+  detected_by: sweep-devtools.py
+  detected: '2026-10-14'
+- partner_name: Atlassian Marketplace
+  partner: atlassian
+  partner_match: aggregator
+  type: marketplace
+  marketplace: atlassian
+  channel: partner-built
+  relationship: platform-app
+  direction: third-party
+  evidence: https://marketplace.atlassian.com/vendors/1217203/lokalise
+  listing_count: 2
+  apps:
+  - Lokalise for Jira
+  - Lokalise Sync for Bitbucket
+  publisher_name: Lokalise
+  detected_by: sweep-devtools.py
+  detected: '2026-10-14'
+- partner_name: JetBrains Marketplace
+  partner: jetbrains
+  partner_match: aggregator
+  type: marketplace
+  marketplace: jetbrains
+  channel: partner-built
+  relationship: platform-app
+  direction: third-party
+  evidence: https://plugins.jetbrains.com/vendor/34728fae-e84c-46ab-9570-836762045563
+  listing_count: 1
+  apps:
+  - i18n Ally
+  publisher_name: Lokalise Inc.
+  badges:
+  - Verified vendor
+  detected_by: sweep-devtools.py
+  detected: '2026-10-14'
+source:
+- https://github.com/marketplace?type=actions
+- https://marketplace.atlassian.com/
+- https://plugins.jetbrains.com/
