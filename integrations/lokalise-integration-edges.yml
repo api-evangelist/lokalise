@@ -1,9 +1,11 @@
 generated: '2026-10-14'
 method: searched
 checked:
+- contentful/integrations/contentful-integration-edges.yml
 - https://github.com/marketplace?type=actions
 - https://marketplace.atlassian.com/
 - https://plugins.jetbrains.com/
+- wordpress/integrations/wordpress-integration-edges.yml
 marketplace_apps: []
 edges:
 - partner_name: GitHub Marketplace (actions)
@@ -58,6 +60,39 @@ edges:
   - Verified vendor
   detected_by: sweep-devtools.py
   detected: '2026-10-14'
+- partner_name: Contentful (own)
+  partner: contentful
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.contentful.com/marketplace/lokalise/
+  mirror_of: contentful/integrations/contentful-integration-edges.yml
+  apps:
+  - Lokalise
+  listing_count: 1
+  detected: '2026-10-15'
+  detected_by: mirror-platform-listings.py
+- partner_name: WordPress (own)
+  partner: wordpress
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://wordpress.org/plugins/lokalise/
+  mirror_of: wordpress/integrations/wordpress-integration-edges.yml
+  apps:
+  - Lokalise Companion Plugin
+  listing_count: 1
+  detected: '2026-10-15'
+  detected_by: mirror-platform-listings.py
+  category: WordPress plugin
 source:
 - https://github.com/marketplace?type=actions
 - https://marketplace.atlassian.com/
