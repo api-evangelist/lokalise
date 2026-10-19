@@ -1,0 +1,397 @@
+openapi: 3.2.0
+info:
+  title: Projects Branches API
+  version: 1.0.0
+  description: 'Describes the API for projects with branches.\n\n**Project Type Compatibility**: Branching is **only supported for Software projects** (localization_files). Documents and Marketing projects do not support branching. All endpoints in this documentation require Software projects with branching enabled.'
+servers:
+- url: https://api.lokalise.com/api2
+security:
+- ApiKeyAuth: []
+tags:
+- name: Branches
+paths:
+  /projects/{project_id}/branches:
+    get:
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Total-Count:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                project_id: 20008339586cded200e0d8.29879849
+                branches:
+                - branch_id: 1234
+                  name: feature/best-web
+                  created_at: 2019-10-01 14:16:00 (Etc/UTC)
+                  created_at_timestamp: 1567001760
+                  created_by: 1123
+                  created_by_email: john@lokalise.com
+                - branch_id: 5678
+                  name: hotfix/error1
+                  created_at: 2019-10-02 14:15:50 (Etc/UTC)
+                  created_at_timestamp: 1567001750
+                  created_by: 1123
+                  created_by_email: john@lokalise.com
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  branch:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Branches'
+      summary: List all branches
+      operationId: ListAllBranches
+      description: 'Retrieves a list of branches.
+
+
+        **Project Type Compatibility:**
+
+        - ✅ **Software projects** (localization_files) - *Only project type that supports branching*
+
+        - ❌ **Documents projects** (paged_documents) - *Branching not supported*
+
+        - ❌ **Marketing projects** (content_integration, marketing, marketing_integrations) - *Branching not supported*
+
+
+        Requires read_projects OAuth access scope.'
+      tags:
+      - Branches
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Number of items to include (max 5000).
+        required: false
+        example: '100'
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: Return results starting from this page.
+        required: false
+        example: '1'
+        schema:
+          type: integer
+      x-operation-id-source: normalized
+      x-operation-id-original: List all branches
+    post:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                branch:
+                  branch_id: 995991
+                  name: hotfix/really-important
+                  created_at: 2019-10-03 14:15:50 (Etc/UTC)
+                  created_at_timestamp: 1567001750
+                  created_by: 1123
+                  created_by_email: john@lokalise.com
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  branch:
+                    $ref: '#/components/schemas/Branches'
+      summary: Create a branch
+      operationId: CreateABranch
+      description: 'Creates a branch in the project. Before using this endpoint, please enable Branching in your project by following this guide.
+
+        Requires admin rights.
+
+
+        **Project Type Compatibility:**
+
+        - ✅ **Software projects** (localization_files) - *Only project type that supports branching*
+
+        - ❌ **Documents projects** (paged_documents) - *Branching not supported*
+
+        - ❌ **Marketing projects** (content_integration, marketing, marketing_integrations) - *Branching not supported*
+
+
+        Requires write_projects OAuth access scope.'
+      tags:
+      - Branches
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              name: hotfix/really-important
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Branch name.
+      x-operation-id-source: normalized
+      x-operation-id-original: Create a branch
+  /projects/{project_id}/branches/{branch_id}:
+    get:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 600904245c4ecf0ec4a9d4.28360690
+                branch:
+                  branch_id: 5678
+                  name: hotfix/error1
+                  created_at: 2019-10-02 14:15:50 (Etc/UTC)
+                  created_at_timestamp: 1567001750
+                  created_by: 1123
+                  created_by_email: john@lokalise.com
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  branch:
+                    $ref: '#/components/schemas/Branches'
+      summary: Retrieve a branch
+      operationId: RetrieveABranch
+      description: 'Retrieves a Branch object.
+
+
+        Requires read_projects OAuth access scope.'
+      tags:
+      - Branches
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch_id
+        in: path
+        description: A unique identifier of the branch.
+        required: true
+        schema:
+          type: number
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve a branch
+    put:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                branch:
+                  branch_id: 995991
+                  name: hotfix/needed-yesterday
+                  created_at: 2019-10-03 14:15:50 (Etc/UTC)
+                  created_at_timestamp: 1567001750
+                  created_by: 1123
+                  created_by_email: john@lokalise.com
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  branch:
+                    $ref: '#/components/schemas/Branches'
+      summary: Update a branch
+      operationId: UpdateABranch
+      description: 'Updates a branch in the project. Requires admin right.
+
+
+        Requires write_projects OAuth access scope.'
+      tags:
+      - Branches
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch_id
+        in: path
+        description: A unique identifier of the branch.
+        required: true
+        schema:
+          type: number
+      requestBody:
+        content:
+          application/json:
+            example:
+              name: hotfix/needed-yesterday
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Branch name.
+      x-operation-id-source: normalized
+      x-operation-id-original: Update a branch
+    delete:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                branch_deleted: true
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  branch_deleted:
+                    type: boolean
+      summary: Delete a branch
+      operationId: DeleteABranch
+      description: 'Deletes a configured branch in the project. Requires admin right.
+
+
+        Requires write_projects OAuth access scope.'
+      tags:
+      - Branches
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch_id
+        in: path
+        description: A unique identifier of the branch.
+        required: true
+        schema:
+          type: number
+      x-operation-id-source: normalized
+      x-operation-id-original: Delete a branch
+  /projects/{project_id}/branches/{branch_id}/merge:
+    post:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                branch_merged: true
+                branch:
+                  branch_id: 995991
+                  name: hotfix/needed-yesterday
+                  created_at: 2019-10-03 14:15:50 (Etc/UTC)
+                  created_at_timestamp: 1567001750
+                  created_by: 1123
+                  created_by_email: john@lokalise.com
+                target_branch:
+                  branch_id: 995123
+                  name: master
+                  created_at: 2019-10-03 14:15:50 (Etc/UTC)
+                  created_at_timestamp: 1567001750
+                  created_by: 1123
+                  created_by_email: john@lokalise.com
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  branch_merged:
+                    type: boolean
+                  branch:
+                    $ref: '#/components/schemas/Branches'
+                  target_branch:
+                    $ref: '#/components/schemas/Branches'
+      summary: Merge a branch
+      operationId: MergeABranch
+      description: 'Merges a branch in the project. Requires admin right.
+
+
+        Requires write_projects OAuth access scope.'
+      tags:
+      - Branches
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch_id
+        in: path
+        description: A unique identifier of the branch.
+        required: true
+        schema:
+          type: number
+      requestBody:
+        content:
+          application/json:
+            example:
+              force_conflict_resolve_using: target
+            schema:
+              type: object
+              properties:
+                force_conflict_resolve_using:
+                  type: string
+                  description: Specify how to resolve conflicts. Possible values are <code>target</code> or <code>source</code>.
+                  enum:
+                  - source
+                  - target
+                target_branch_id:
+                  type: number
+                  description: The branch to merge to. Defaults to master branch if not specified.
+      x-operation-id-source: normalized
+      x-operation-id-original: Merge a branch
+components:
+  schemas:
+    Branches:
+      type: object
+      properties:
+        branch_id:
+          type: number
+          description: A unique identifier of the branch.
+        name:
+          type: string
+          description: Branch name.
+        created_at:
+          type: string
+          description: Date of branch creation.
+        created_at_timestamp:
+          type: number
+          description: Unix timestamp when branch was created.
+        created_by:
+          type: number
+          description: An identifier of a user who has created the branch.
+        created_by_email:
+          type: string
+          description: An e-mail of a user who has created the branch.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Token

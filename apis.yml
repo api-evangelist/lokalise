@@ -142,6 +142,76 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/lokalise-projects-api-openapi.yml
+- aid: lokalise:lokalise-branches-api
+  name: Lokalise Branches API
+  description: The Branches API from Lokalise — 3 operation(s) for branches.
+  humanURL: https://developers.lokalise.com/
+  baseURL: https://api.lokalise.com/api2
+  tags:
+  - Branches
+  properties:
+  - type: OpenAPI
+    url: openapi/lokalise-branches-api-openapi.yml
+- aid: lokalise:lokalise-comments-api
+  name: Lokalise Comments API
+  description: The Comments API from Lokalise — 3 operation(s) for comments.
+  humanURL: https://developers.lokalise.com/
+  baseURL: https://api.lokalise.com/api2
+  tags:
+  - Comments
+  properties:
+  - type: OpenAPI
+    url: openapi/lokalise-comments-api-openapi.yml
+- aid: lokalise:lokalise-languages-api
+  name: Lokalise Languages API
+  description: The Languages API from Lokalise — 2 operation(s) for languages.
+  humanURL: https://developers.lokalise.com/
+  baseURL: https://api.lokalise.com/api2
+  tags:
+  - Languages
+  properties:
+  - type: OpenAPI
+    url: openapi/lokalise-languages-api-openapi.yml
+- aid: lokalise:lokalise-queued-processes-api
+  name: Lokalise Queued Processes API
+  description: The Queued Processes API from Lokalise — 2 operation(s) for queued processes.
+  humanURL: https://developers.lokalise.com/
+  baseURL: https://api.lokalise.com/api2
+  tags:
+  - Queued Processes
+  properties:
+  - type: OpenAPI
+    url: openapi/lokalise-queued-processes-api-openapi.yml
+- aid: lokalise:lokalise-screenshots-api
+  name: Lokalise Screenshots API
+  description: The Screenshots API from Lokalise — 1 operation(s) for screenshots.
+  humanURL: https://developers.lokalise.com/
+  baseURL: https://api.lokalise.com/api2
+  tags:
+  - Screenshots
+  properties:
+  - type: OpenAPI
+    url: openapi/lokalise-screenshots-api-openapi.yml
+- aid: lokalise:lokalise-tasks-api
+  name: Lokalise Tasks API
+  description: The Tasks API from Lokalise — 3 operation(s) for tasks.
+  humanURL: https://developers.lokalise.com/
+  baseURL: https://api.lokalise.com/api2
+  tags:
+  - Tasks
+  properties:
+  - type: OpenAPI
+    url: openapi/lokalise-tasks-api-openapi.yml
+- aid: lokalise:lokalise-translations-api
+  name: Lokalise Translations API
+  description: The Translations API from Lokalise — 2 operation(s) for translations.
+  humanURL: https://developers.lokalise.com/
+  baseURL: https://api.lokalise.com/api2
+  tags:
+  - Translations
+  properties:
+  - type: OpenAPI
+    url: openapi/lokalise-translations-api-openapi.yml
 common:
 - type: AgenticAccess
   url: agentic-access/lokalise-agentic-access.yml

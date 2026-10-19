@@ -1,0 +1,369 @@
+openapi: 3.2.0
+info:
+  title: Projects with branches Languages API
+  version: 1.0.0
+  description: 'Describes the API for projects with branches.\n\n**Project Type Compatibility**: Branching is **only supported for Software projects** (localization_files). Documents and Marketing projects do not support branching. All endpoints in this documentation require Software projects with branching enabled.'
+servers:
+- url: https://api.lokalise.com/api2
+security:
+- ApiKeyAuth: []
+tags:
+- name: Languages
+paths:
+  /projects/{project_id}:{branch}/languages:
+    get:
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Total-Count:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  languages:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Languages'
+      summary: List project languages
+      operationId: ListProjectLanguages
+      description: 'Retrieves a list of project languages.
+
+
+        Requires read_languages OAuth access scope.'
+      tags:
+      - Languages
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Number of items to include (max 5000).
+        required: false
+        example: '100'
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: Return results starting from this page.
+        required: false
+        example: '1'
+        schema:
+          type: integer
+      x-operation-id-source: normalized
+      x-operation-id-original: List project languages
+    post:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                languages:
+                - lang_id: 640
+                  lang_iso: en
+                  lang_name: English
+                  is_rtl: false
+                  plural_forms:
+                  - one
+                  - other
+                  cc_iso: en
+                - lang_id: 597
+                  lang_iso: ru
+                  lang_name: Russian
+                  is_rtl: false
+                  plural_forms:
+                  - one
+                  - few
+                  - many
+                  - other
+                  cc_iso: ru
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  languages:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Languages'
+      summary: Create languages
+      operationId: CreateLanguages
+      description: 'Creates one or more languages in the project. Requires *Manage languages* admin right.
+
+
+        The `language_iso` is the identifer of one of the system languages. You are only required to include the `language_iso` attribute, however you may override the default language code, language name and plural forms as well.
+
+
+        Requires write_languages OAuth access scope.'
+      tags:
+      - Languages
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              languages:
+              - lang_iso: en
+              - lang_iso: ru
+            schema:
+              type: object
+              properties:
+                languages:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - lang_iso
+                    properties:
+                      lang_iso:
+                        type: string
+                        description: A unique language code in the system.
+                      custom_iso:
+                        type: string
+                        description: Override language/locale code.
+                      custom_name:
+                        type: string
+                        description: Override language name.
+                      custom_plural_forms:
+                        type: array
+                        items:
+                          type: string
+                        description: Override list of supported plural forms for this language.
+                  description: A set of languages to add
+      x-operation-id-source: normalized
+      x-operation-id-original: Create languages
+  /projects/{project_id}:{branch}/languages/{lang_id}:
+    get:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                language:
+                  lang_id: 640
+                  lang_iso: en
+                  lang_name: English
+                  is_rtl: false
+                  plural_forms:
+                  - one
+                  - other
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  language:
+                    $ref: '#/components/schemas/Languages'
+      summary: Retrieve a language
+      operationId: RetrieveALanguage
+      description: 'Retrieves a Language object.
+
+
+        Requires read_languages OAuth access scope.'
+      tags:
+      - Languages
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: lang_id
+        in: path
+        description: A unique language identifier in the system.
+        required: true
+        schema:
+          type: number
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve a language
+    put:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                language:
+                  lang_id: 640
+                  lang_iso: en-US
+                  lang_name: English
+                  is_rtl: false
+                  plural_forms:
+                  - one
+                  - zero
+                  - few
+                  - other
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  language:
+                    $ref: '#/components/schemas/Languages'
+      summary: Update a language
+      operationId: UpdateALanguage
+      description: 'Updates the properties of a language. Requires *Manage languages* admin right.
+
+
+        Requires write_languages OAuth access scope.'
+      tags:
+      - Languages
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: lang_id
+        in: path
+        description: A unique language identifier in the system.
+        required: true
+        schema:
+          type: number
+      requestBody:
+        content:
+          application/json:
+            example:
+              lang_iso: en-US
+              plural_forms:
+              - one
+              - zero
+              - few
+              - other
+            schema:
+              type: object
+              properties:
+                lang_iso:
+                  type: string
+                  description: Language/locale code.
+                lang_name:
+                  type: string
+                  description: Language name.
+                plural_forms:
+                  type: array
+                  items:
+                    type: string
+                  description: List of supported plural forms.
+      x-operation-id-source: normalized
+      x-operation-id-original: Update a language
+    delete:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  language_deleted:
+                    type: boolean
+      summary: Delete a language
+      operationId: DeleteALanguage
+      description: 'Deletes a language from the project. Requires *Manage languages* admin right.
+
+
+        Requires write_languages OAuth access scope.'
+      tags:
+      - Languages
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: lang_id
+        in: path
+        description: A unique language identifier in the system.
+        required: true
+        schema:
+          type: number
+      x-operation-id-source: normalized
+      x-operation-id-original: Delete a language
+components:
+  schemas:
+    Languages:
+      type: object
+      properties:
+        lang_id:
+          type: number
+          description: A unique language identifier in the system.
+        lang_iso:
+          type: string
+          description: Language/locale code.
+        lang_name:
+          type: string
+          description: Language name.
+        is_rtl:
+          type: boolean
+          description: Whether the language is Right-To-Left.
+        plural_forms:
+          type: array
+          items: {}
+          description: List of supported plural forms.
+        cc_iso:
+          type: string
+          description: Country code, associated with the language.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Token

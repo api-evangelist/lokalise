@@ -1,44 +1,175 @@
 openapi: 3.2.0
 info:
-  title: Lokalise API v2 Files API
-  description: 'Lokalise REST API (APIv2) for the Lokalise translation management system.
-
-    Resources include projects, keys, translations, files, contributors,
-
-    languages, tasks, snapshots, branches, glossaries, webhooks, and orders.
-
-    Authentication is via API token in the `X-Api-Token` header (OAuth 2 also supported).'
-  version: '2.0'
-  contact:
-    name: Lokalise Developers
-    url: https://developers.lokalise.com/
-  license:
-    name: Proprietary
-    url: https://lokalise.com/legal/
+  title: Projects with branches Files API
+  version: 1.0.0
+  description: 'Describes the API for projects with branches.\n\n**Project Type Compatibility**: Branching is **only supported for Software projects** (localization_files). Documents and Marketing projects do not support branching. All endpoints in this documentation require Software projects with branching enabled.'
 servers:
 - url: https://api.lokalise.com/api2
-  description: Lokalise API v2
 security:
 - ApiKeyAuth: []
 tags:
 - name: Files
 paths:
-  /projects/{project_id}/files/upload:
-    parameters:
-    - name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
-    post:
+  /projects/{project_id}:{branch}/files:
+    get:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                files:
+                - file_id: 33
+                  filename: '%LANG_ISO%-index.json'
+                  key_count: 441
+                - file_id: 24
+                  filename: admin.json
+                  key_count: 32
+                - file_id: -1
+                  filename: __unassigned__
+                  key_count: 11
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  files:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Files'
+      summary: List all files
+      operationId: ListAllFiles
+      description: 'Lists project files and associated key count. If there are some keys in the project that do not have a file association, they will be returned with filename `__unassigned__`.
+
+
+        Requires read_files OAuth access scope.'
       tags:
       - Files
-      summary: Upload a file
-      operationId: uploadFile
-      requestBody:
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
         required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: filter_filename
+        in: query
+        description: Set filename filter for the list.
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Number of items to include (max 5000).
+        required: false
+        example: '100'
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: Return results starting from this page.
+        required: false
+        example: '1'
+        schema:
+          type: integer
+      x-operation-id-source: normalized
+      x-operation-id-original: List all files
+  /projects/{project_id}:{branch}/files/upload:
+    post:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  process:
+                    $ref: '#/components/schemas/QueuedProcesses'
+          description: OK
+        '202':
+          description: Accepted
+          headers:
+            Location:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                project_id: 767946315e9866d013c1d0.08299127
+                process:
+                  process_id: 2e0559e60e856555fbc15bdf78ab2b0ca3406e8f
+                  type: file-import
+                  status: queued
+                  message: ''
+                  created_by: 1234
+                  created_by_email: example@example.com
+                  created_at: 2020-04-20 13:43:43 (Etc/UTC)
+                  created_at_timestamp: 1587390223
+        '302':
+          description: Found
+          headers:
+            Location:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                project_id: 767946315e9866d013c1d0.08299127
+                process:
+                  process_id: 2e0559e60e856555fbc15bdf78ab2b0ca3406e8f
+                  type: file-import
+                  status: queued
+                  message: ''
+                  created_by: 1234
+                  created_by_email: example@example.com
+                  created_at: 2020-04-20 13:43:43 (Etc/UTC)
+                  created_at_timestamp: 1587390223
+      summary: Upload a file
+      operationId: UploadAFile
+      description: 'Queues a localization file for import and returns a 202 or 302 response along with a Queued process object. Learn more. Requires *Upload files* admin right. Supported file types.
+
+
+        Please note that the 302 response code is not currently used, but in the future it will be returned if the same file is already in the upload queue.
+
+
+        Requires write_files OAuth access scope.'
+      tags:
+      - Files
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      requestBody:
         content:
           application/json:
+            example:
+              filename: index.json
+              data: D94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGL.....
+              lang_iso: en
+              tags:
+              - index
+              - admin
+              - v2.0
+              convert_placeholders: true
             schema:
               type: object
               required:
@@ -48,39 +179,669 @@ paths:
               properties:
                 data:
                   type: string
-                  description: Base64-encoded file content
+                  description: Base64 encoded file. Must be one of the supported file types.
                 filename:
                   type: string
+                  description: Set the filename. You may optionally use a relative path in the filename (e.g admin/main.json), however keep in mind that path would become a unique part of the file.
                 lang_iso:
                   type: string
+                  description: Language code of the translations in the file you are importing.
                 convert_placeholders:
                   type: boolean
+                  description: Enable to automatically convert placeholders to the Lokalise universal placeholders. Defaults to <b>true;</b> if omitted, placeholders in the uploaded content are converted automatically. Set it to <b>false</b> to preserve the <i>original placeholder syntax</i>.
                 detect_icu_plurals:
                   type: boolean
+                  description: Enable to automatically detect and parse ICU formatted plurals in your translations.
                 tags:
                   type: array
                   items:
                     type: string
+                  description: Tag keys with the specified tags. By default tags are applied to created and updated keys.
+                tag_inserted_keys:
+                  type: boolean
+                  description: Add specified tags to inserted keys.
+                tag_updated_keys:
+                  type: boolean
+                  description: Add specified tags to updated keys.
+                tag_skipped_keys:
+                  type: boolean
+                  description: Add specified tags to skipped keys.
+                tag_parsed_keys:
+                  type: boolean
+                  default: false
+                  description: Add tags parsed from the uploaded file (e.g. Structured JSON per-key tags) to the corresponding keys.
                 replace_modified:
                   type: boolean
+                  description: Enable to replace translations, that have been modified (in the file being uploaded).
+                replace_metadata:
+                  type: boolean
+                  default: false
+                  description: Structured JSON only. Enable to replace key metadata (tags, notes, character limit) with the values from the uploaded file. Tags added manually (via the editor, bulk actions, tasks or connectors) are preserved; only tags previously set by a file upload are replaced. Defaults to false.
+                slashn_to_linebreak:
+                  type: boolean
+                  description: Enable to replace \n with a line break.
+                keys_to_values:
+                  type: boolean
+                  description: Enable to automatically replace values with key names.
+                distinguish_by_file:
+                  type: boolean
+                  description: Enable to allow keys with similar names to coexist, in case they are assigned to different filenames.
                 apply_tm:
                   type: boolean
+                  description: Enable to automatically apply 100% translation memory matches. This option will take priority over <code>use_automations</code> if set to <code>true</code>.
+                use_automations:
+                  type: boolean
+                  description: Whether to run automations for this upload.
+                hidden_from_contributors:
+                  type: boolean
+                  description: Enable to automatically set newly created keys as "Hidden from contributors".
                 cleanup_mode:
                   type: boolean
+                  description: Enable to delete all keys with all language translations that are not present in the uploaded file. You may want to make a snapshot of the project before importing new file, just in case.
+                custom_translation_status_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Custom translation status IDs to be added to translations. By default statuses are applied to created and updated translations.
+                custom_translation_status_inserted_keys:
+                  type: boolean
+                  description: Add specified custom translation statuses to inserted keys.
+                custom_translation_status_updated_keys:
+                  type: boolean
+                  description: Add specified custom translation statuses to updated keys.
+                custom_translation_status_skipped_keys:
+                  type: boolean
+                  description: Add specified custom translation statuses to skipped keys.
+                skip_detect_lang_iso:
+                  type: boolean
+                  description: Skip automatic language detection by filename.
+                format:
+                  type: string
+                  description: File format (e.g. json, strings, xml). Must be file extension of any of the file formats we support.
+                filter_task_id:
+                  type: number
+                  description: Apply import results as a part of a task. Available only for offline_xliff file format.
+                title:
+                  type: string
+                  maxLength: 256
+                  description: Set a human-readable title for the uploaded file, displayed in the UI instead of the filename. Maximum 256 characters. Relevant for Marketing and support (M&S) project types only.
+      x-operation-id-source: normalized
+      x-operation-id-original: Upload a file
+  /projects/{project_id}:{branch}/files/async-download:
+    post:
       responses:
         '200':
-          description: Upload accepted
+          description: OK
+          headers: {}
           content:
             application/json:
+              example:
+                process_id: 74738ff5-5367-5958-9aee-98fffdcd1876
               schema:
                 type: object
-        '202':
-          description: Processing in background
+                properties:
+                  process_id:
+                    type: string
+      summary: Download files (Async)
+      operationId: DownloadFiles(Async)
+      description: Starts a project export process. The progress of the process can be tracked using the list all processes API endpoint. Once complete, the download URL can be accessed using the Retrieve process API endpoint. For general details about the Download endpoint, please refer to the Download files API endpoint.
+      tags:
+      - Files
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              format: json
+              original_filenames: true
+            schema:
+              type: object
+              required:
+              - format
+              properties:
+                format:
+                  type: string
+                  description: File format (e.g. json, strings, xml). Must be file extension of any of the file formats we support. May also be <code>ios_sdk</code> or <code>android_sdk</code> for respective OTA SDK bundles.
+                original_filenames:
+                  type: boolean
+                  description: Enable to use original filenames/formats. If set to <code>false</code> all keys will be export to a single file per language.
+                bundle_structure:
+                  type: string
+                  description: Bundle structure, used when <code>original_filenames</code> set to <code>false</code>. Allowed placeholders are <code>%LANG_ISO%</code>, <code>%LANG_NAME%</code>, <code>%FORMAT%</code> and <code>%PROJECT_NAME%</code>).
+                directory_prefix:
+                  type: string
+                  description: Directory prefix in the bundle, used when <code>original_filenames</code> set to <code>true</code>). Allowed placeholder is <code>%LANG_ISO%</code>.
+                all_platforms:
+                  type: boolean
+                  description: Enable to include all platform keys. If disabled, only the keys, associated with the platform of the <code>format</code> will be exported.
+                filter_langs:
+                  type: array
+                  items:
+                    type: string
+                  description: List of languages to export. Omit this parameter for all languages.
+                filter_data:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                    - last_reviewed_only
+                    - nonhidden
+                    - reviewed
+                    - reviewed_only
+                    - translated
+                    - untranslated
+                    - verified
+                  description: Narrow export data range. Allowed values are <code>translated</code> or <code>untranslated</code>, <code>reviewed</code> (or <code>reviewed_only</code>), <code>last_reviewed_only</code>, <code>verified</code> and <code>nonhidden</code>.
+                filter_filenames:
+                  type: array
+                  items:
+                    type: string
+                  description: Only keys attributed to selected files will be included. Leave empty for all.
+                add_newline_eof:
+                  type: boolean
+                  description: Enable to add new line at end of file (if supported by format).
+                custom_translation_status_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Only translations attributed to selected custom statuses will be included. Leave empty for all.
+                include_tags:
+                  type: array
+                  items:
+                    type: string
+                  description: Narrow export range to tags specified.
+                exclude_tags:
+                  type: array
+                  items:
+                    type: string
+                  description: Specify to exclude keys with these tags.
+                export_sort:
+                  type: string
+                  description: Export key sort mode. Allowed value are <code>first_added</code>, <code>last_added</code>, <code>last_updated</code>, <code>a_z</code>, <code>z_a</code>.
+                export_empty_as:
+                  type: string
+                  description: Select how you would like empty translations to be exported. Allowed values are <code>empty</code> to keep empty, <code>base</code> to replace with the base language value, <code>null</code> to replace with null (YAML export only), or <code>skip</code> to omit.
+                  enum:
+                  - base
+                  - empty
+                  - 'null'
+                  - skip
+                export_null_as:
+                  type: string
+                  description: (Ruby on Rails YAML export only) Select how you would like null (void) translations to be exported. Allowed values are <code>null</code> to keep null, <code>empty</code> to replace with empty string.
+                  enum:
+                  - empty
+                  - 'null'
+                include_comments:
+                  type: boolean
+                  description: Enable to include key comments and description in exported file (if supported by the format).
+                include_description:
+                  type: boolean
+                  description: Enable to include key description in exported file (if supported by the format).
+                include_pids:
+                  type: array
+                  items:
+                    type: string
+                  description: Other projects ID's, which keys should be included with this export.
+                triggers:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                    - amazons3
+                    - azure
+                    - bitbucket
+                    - gcs
+                    - github
+                    - gitlab
+                  description: Trigger integration exports (must be enabled in project settings). Allowed values are <code>amazons3</code>, <code>gcs</code>, <code>github</code>, <code>github-enterprise</code>, <code>gitlab</code>, <code>bitbucket</code>, <code>bitbucket-enterprise</code>, <code>azure</code>.
+                filter_repositories:
+                  type: array
+                  items:
+                    type: string
+                  description: Pull requests will be created only for listed repositories (<code>organization/repository</code> format). Leave empty array to process all configured integrations by platform only.
+                replace_breaks:
+                  type: boolean
+                  description: Enable to replace line breaks in exported translations with \n.
+                disable_references:
+                  type: boolean
+                  description: Enable to skip automatic replace of key reference placeholders (e.g. [%key:hello_world%]) with their corresponding translations.
+                plural_format:
+                  type: string
+                  description: Override the default plural format for the file type. Allowed values are <code>json_string</code>, <code>icu</code>, <code>array</code>, <code>generic</code>, <code>symfony</code>, <code>i18next</code>, <code>i18next_v4</code>. See Plurals and placeholders for more information about plural support for specific file formats.
+                  enum:
+                  - array
+                  - generic
+                  - i18next
+                  - i18next_v4
+                  - icu
+                  - json_string
+                  - symfony
+                placeholder_format:
+                  type: string
+                  description: Override the default placeholder format for the file type. Allowed values are <code>printf</code>, <code>ios</code>, <code>icu</code>, <code>net</code>, <code>symfony</code>, <code>i18n</code>, <code>raw</code>). See Plurals and placeholders for more information.
+                  enum:
+                  - icu
+                  - ios
+                  - net
+                  - printf
+                  - symfony
+                  - i18n
+                  - raw
+                webhook_url:
+                  type: string
+                  description: Once the export is complete, sends a HTTP POST with the generated bundle URL to the specified URL.
+                language_mapping:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      original_language_iso:
+                        type: string
+                        description: Original language code as defined in language settings.
+                      custom_language_iso:
+                        type: string
+                        description: Language code to replace the original one with.
+                  description: List of languages to override default iso codes for this export.
+                icu_numeric:
+                  type: boolean
+                  description: If enabled, plural forms <code>zero</code>, <code>one</code> and <code>two</code> will be replaced with <code>=0</code>, <code>=1</code> and <code>=2</code> respectively. Only works for ICU plural format.
+                escape_percent:
+                  type: boolean
+                  description: Only works for printf placeholder format. When enabled, all universal percent placeholders "[%]" will be always exported as "%%".
+                indentation:
+                  type: string
+                  description: Provide to override default indentation in supported files. Allowed values are <code>default</code>, <code>1sp</code>, <code>2sp</code>, <code>3sp</code>, <code>4sp</code>, <code>5sp</code>, <code>6sp</code>, <code>7sp</code>, <code>8sp</code> and <code>tab</code>.
+                  enum:
+                  - 1sp
+                  - 2sp
+                  - 3sp
+                  - 4sp
+                  - 5sp
+                  - 6sp
+                  - 7sp
+                  - 8sp
+                  - default
+                  - tab
+                yaml_include_root:
+                  type: boolean
+                  description: (YAML export only). Enable to include language ISO code as root key.
+                json_unescaped_slashes:
+                  type: boolean
+                  description: (JSON export only). Enable to leave forward slashes unescaped.
+                java_properties_encoding:
+                  type: string
+                  description: (Java Properties export only). Encoding for .properties files. Allowed values are <code>utf-8</code> and <code>latin-1</code>.
+                java_properties_separator:
+                  type: string
+                  description: (Java Properties export only). Separator for keys/values in .properties files. Allowed values are <code>=</code> and <code>:</code>.
+                bundle_description:
+                  type: string
+                  description: Description of the created bundle. Applies to <code>ios_sdk</code> or <code>android_sdk</code> OTA SDK bundles.
+                filter_task_id:
+                  type: number
+                  description: Only keys attributed to the task will be included. Available only for offline_xliff file format.
+                compact:
+                  type: boolean
+                  description: (ARB export only). Export the minimum required structure for use in production. Don't include metadata such as context, comments and screenshots.
+      x-operation-id-source: normalized
+      x-operation-id-original: Download files (Async)
+  /projects/{project_id}:{branch}/files/download:
+    post:
+      responses:
+        '200':
+          description: OK
+          headers: {}
           content:
             application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                bundle_url: https://s3-eu-west-1.amazonaws.com/lokalise-assets/export/MyApp-locale.zip
               schema:
                 type: object
+                properties:
+                  project_id:
+                    type: string
+                  bundle_url:
+                    type: string
+      summary: Download files
+      operationId: DownloadFiles
+      description: 'Exports project files as a .zip bundle. Generated bundle will be uploaded to an Amazon S3 bucket, which will be stored there for 1 month available to download. As the bundle is generated and uploaded you would get a response with the URL to the file. Requires *Download files* admin right.
+
+
+        There are two ways to group keys by filenames when you are exporting - either all keys to a single file per language or use the previously assigned filenames. Learn more.
+
+
+        Requires read_files OAuth access scope.
+
+
+        *Please note: Starting June 1st, 2025, this endpoint will be limited to projects with under 10,000 key-language pairs, for more details See our API limits page*'
+      tags:
+      - Files
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              format: json
+              original_filenames: true
+            schema:
+              type: object
+              required:
+              - format
+              properties:
+                format:
+                  type: string
+                  description: File format (e.g. json, strings, xml). Must be file extension of any of the file formats we support. May also be <code>ios_sdk</code> or <code>android_sdk</code> for respective OTA SDK bundles.
+                original_filenames:
+                  type: boolean
+                  description: Enable to use original filenames/formats. If set to <code>false</code> all keys will be export to a single file per language.
+                bundle_structure:
+                  type: string
+                  description: Bundle structure, used when <code>original_filenames</code> set to <code>false</code>. Allowed placeholders are <code>%LANG_ISO%</code>, <code>%LANG_NAME%</code>, <code>%FORMAT%</code> and <code>%PROJECT_NAME%</code>).
+                directory_prefix:
+                  type: string
+                  description: Directory prefix in the bundle, used when <code>original_filenames</code> set to <code>true</code>). Allowed placeholder is <code>%LANG_ISO%</code>.
+                all_platforms:
+                  type: boolean
+                  description: Enable to include all platform keys. If disabled, only the keys, associated with the platform of the <code>format</code> will be exported.
+                filter_langs:
+                  type: array
+                  items:
+                    type: string
+                  description: List of languages to export. Omit this parameter for all languages.
+                filter_data:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                    - last_reviewed_only
+                    - nonhidden
+                    - reviewed
+                    - reviewed_only
+                    - translated
+                    - untranslated
+                    - verified
+                  description: Narrow export data range. Allowed values are <code>translated</code> or <code>untranslated</code>, <code>reviewed</code> (or <code>reviewed_only</code>), <code>last_reviewed_only</code>, <code>verified</code> and <code>nonhidden</code>.
+                filter_filenames:
+                  type: array
+                  items:
+                    type: string
+                  description: Only keys attributed to selected files will be included. Leave empty for all.
+                add_newline_eof:
+                  type: boolean
+                  description: Enable to add new line at end of file (if supported by format).
+                custom_translation_status_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Only translations attributed to selected custom statuses will be included. Leave empty for all.
+                include_tags:
+                  type: array
+                  items:
+                    type: string
+                  description: Narrow export range to tags specified.
+                exclude_tags:
+                  type: array
+                  items:
+                    type: string
+                  description: Specify to exclude keys with these tags.
+                export_sort:
+                  type: string
+                  description: Export key sort mode. Allowed value are <code>first_added</code>, <code>last_added</code>, <code>last_updated</code>, <code>a_z</code>, <code>z_a</code>.
+                export_empty_as:
+                  type: string
+                  description: Select how you would like empty translations to be exported. Allowed values are <code>empty</code> to keep empty, <code>base</code> to replace with the base language value, <code>null</code> to replace with null (YAML export only), or <code>skip</code> to omit.
+                  enum:
+                  - base
+                  - empty
+                  - 'null'
+                  - skip
+                export_null_as:
+                  type: string
+                  description: (Ruby on Rails YAML export only) Select how you would like null (void) translations to be exported. Allowed values are <code>null</code> to keep null, <code>empty</code> to replace with empty string.
+                  enum:
+                  - empty
+                  - 'null'
+                include_comments:
+                  type: boolean
+                  description: Enable to include key comments and description in exported file (if supported by the format).
+                include_description:
+                  type: boolean
+                  description: Enable to include key description in exported file (if supported by the format).
+                include_pids:
+                  type: array
+                  items:
+                    type: string
+                  description: Other projects ID's, which keys should be included with this export.
+                triggers:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                    - amazons3
+                    - azure
+                    - bitbucket
+                    - gcs
+                    - github
+                    - gitlab
+                  description: Trigger integration exports (must be enabled in project settings). Allowed values are <code>amazons3</code>, <code>gcs</code>, <code>github</code>, <code>github-enterprise</code>, <code>gitlab</code>, <code>bitbucket</code>, <code>bitbucket-enterprise</code>, <code>azure</code>.
+                filter_repositories:
+                  type: array
+                  items:
+                    type: string
+                  description: Pull requests will be created only for listed repositories (<code>organization/repository</code> format). Leave empty array to process all configured integrations by platform only.
+                replace_breaks:
+                  type: boolean
+                  description: Enable to replace line breaks in exported translations with \n.
+                disable_references:
+                  type: boolean
+                  description: Enable to skip automatic replace of key reference placeholders (e.g. [%key:hello_world%]) with their corresponding translations.
+                plural_format:
+                  type: string
+                  description: Override the default plural format for the file type. Allowed values are <code>json_string</code>, <code>icu</code>, <code>array</code>, <code>generic</code>, <code>symfony</code>, <code>i18next</code>, <code>i18next_v4</code>. See Plurals and placeholders for more information about plural support for specific file formats.
+                  enum:
+                  - array
+                  - generic
+                  - i18next
+                  - i18next_v4
+                  - icu
+                  - json_string
+                  - symfony
+                placeholder_format:
+                  type: string
+                  description: Override the default placeholder format for the file type. Allowed values are <code>printf</code>, <code>ios</code>, <code>icu</code>, <code>net</code>, <code>symfony</code>, <code>i18n</code>, <code>raw</code>). See Plurals and placeholders for more information.
+                  enum:
+                  - icu
+                  - ios
+                  - net
+                  - printf
+                  - symfony
+                  - i18n
+                  - raw
+                webhook_url:
+                  type: string
+                  description: Once the export is complete, sends a HTTP POST with the generated bundle URL to the specified URL.
+                language_mapping:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      original_language_iso:
+                        type: string
+                        description: Original language code as defined in language settings.
+                      custom_language_iso:
+                        type: string
+                        description: Language code to replace the original one with.
+                  description: List of languages to override default iso codes for this export.
+                icu_numeric:
+                  type: boolean
+                  description: If enabled, plural forms <code>zero</code>, <code>one</code> and <code>two</code> will be replaced with <code>=0</code>, <code>=1</code> and <code>=2</code> respectively. Only works for ICU plural format.
+                escape_percent:
+                  type: boolean
+                  description: Only works for printf placeholder format. When enabled, all universal percent placeholders "[%]" will be always exported as "%%".
+                indentation:
+                  type: string
+                  description: Provide to override default indentation in supported files. Allowed values are <code>default</code>, <code>1sp</code>, <code>2sp</code>, <code>3sp</code>, <code>4sp</code>, <code>5sp</code>, <code>6sp</code>, <code>7sp</code>, <code>8sp</code> and <code>tab</code>.
+                  enum:
+                  - 1sp
+                  - 2sp
+                  - 3sp
+                  - 4sp
+                  - 5sp
+                  - 6sp
+                  - 7sp
+                  - 8sp
+                  - default
+                  - tab
+                yaml_include_root:
+                  type: boolean
+                  description: (YAML export only). Enable to include language ISO code as root key.
+                json_unescaped_slashes:
+                  type: boolean
+                  description: (JSON export only). Enable to leave forward slashes unescaped.
+                java_properties_encoding:
+                  type: string
+                  description: (Java Properties export only). Encoding for .properties files. Allowed values are <code>utf-8</code> and <code>latin-1</code>.
+                java_properties_separator:
+                  type: string
+                  description: (Java Properties export only). Separator for keys/values in .properties files. Allowed values are <code>=</code> and <code>:</code>.
+                bundle_description:
+                  type: string
+                  description: Description of the created bundle. Applies to <code>ios_sdk</code> or <code>android_sdk</code> OTA SDK bundles.
+                filter_task_id:
+                  type: number
+                  description: Only keys attributed to the task will be included. Available only for offline_xliff file format.
+                compact:
+                  type: boolean
+                  description: (ARB export only). Export the minimum required structure for use in production. Don't include metadata such as context, comments and screenshots.
+      x-operation-id-source: normalized
+      x-operation-id-original: Download files
+  /projects/{project_id}:{branch}/files/{file_id}:
+    delete:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                file_deleted: true
+        '400':
+          description: Bad Request - Action not supported by this project type
+          content:
+            application/json:
+              example:
+                error:
+                  message: Action not supported by this type of project
+                  code: 400
+      summary: Delete a file
+      operationId: DeleteAFile
+      description: 'Deletes a file and its associated keys from the project.
+
+
+        **Project Type Compatibility:**
+
+        - ❌ **Software projects** (localization_files) - *File deletion not supported for Software projects*
+
+        - ❌ **Documents projects** (paged_documents) - *Branching not supported for Documents projects*
+
+        - ❌ **Marketing projects** (content_integration, marketing, marketing_integrations) - *Branching not supported for Marketing projects*
+
+
+        **Note:** This endpoint requires branching support, which is only available for Software projects. However, Software projects do not support file deletion. This creates a logical conflict - this endpoint may not be practically usable.
+
+
+        Requires write_files OAuth access scope.'
+      tags:
+      - Files
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: file_id
+        in: path
+        description: A unique identifier of the file.
+        required: true
+        schema:
+          type: number
+      x-operation-id-source: normalized
+      x-operation-id-original: Delete a file
 components:
+  schemas:
+    QueuedProcesses:
+      type: object
+      properties:
+        process_id:
+          type: string
+          description: A unique process identifier.
+        type:
+          type: string
+          description: The type of the process. Can be <code>file-import</code>, <code>sketch-import</code> or <code>bulk-apply-tm</code>.
+        status:
+          type: string
+          description: Current status of the process. Can be <code>queued</code>, <code>pre_processing</code>, <code>running</code>, <code>post_processing</code>, <code>cancelled</code>, <code>finished</code> or <code>failed</code>.
+        message:
+          type: string
+          description: Can contain a message related to the current process status (such as an error message).
+        created_by:
+          type: number
+          description: ID of a user who initiated the process.
+        created_by_email:
+          type: string
+          description: email of a user who initiated the process.
+        created_at:
+          type: string
+          description: Date of when the process was created in the queue.
+        created_at_timestamp:
+          type: number
+          description: Unix timestamp of when the process was created in the queue.
+    Files:
+      type: object
+      properties:
+        file_id:
+          type: number
+          description: A unique identifier of the file.
+        filename:
+          type: string
+          description: File name.
+        key_count:
+          type: number
+          description: Total number of keys, associated with this file.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

@@ -1,0 +1,12 @@
+{
+ "url": "https://developers.lokalise.com/openapi/lokalise-api-with-branches.yml",
+ "final": "https://developers.lokalise.com/openapi/lokalise-api-with-branches.yml",
+ "status": 200,
+ "content_type": "application/json; charset=utf-8",
+ "bytes": 167929,
+ "sha256": "ff59ca82ca916b365737a617fd7540f0c52dcf9576fbf2796c64b6a49f2a8bf8",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "re-archived: the provider's current document replaced a stale archive (roadmap#793); the old files are in openapi/_superseded/2026-10-19-stale"
+}

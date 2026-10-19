@@ -1,0 +1,387 @@
+openapi: 3.2.0
+info:
+  title: Projects with branches Comments API
+  version: 1.0.0
+  description: 'Describes the API for projects with branches.\n\n**Project Type Compatibility**: Branching is **only supported for Software projects** (localization_files). Documents and Marketing projects do not support branching. All endpoints in this documentation require Software projects with branching enabled.'
+servers:
+- url: https://api.lokalise.com/api2
+security:
+- ApiKeyAuth: []
+tags:
+- name: Comments
+paths:
+  /projects/{project_id}:{branch}/comments:
+    get:
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Total-Count:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                comments:
+                - comment_id: 44444
+                  key_id: 12345
+                  comment: Hello, world!
+                  added_by: 420
+                  added_by_email: commenter@mycompany.com
+                  added_at: 2018-12-31 12:00:00 (Etc/UTC)
+                  added_at_timestamp: 1546257600
+                - comment_id: 44445
+                  key_id: 12346
+                  comment: Bye, world!
+                  added_by: 420
+                  added_by_email: commenter@mycompany.com
+                  added_at: 2018-12-31 12:00:00 (Etc/UTC)
+                  added_at_timestamp: 1546257600
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  comments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Comments'
+      summary: List project comments
+      operationId: ListProjectComments
+      description: 'Retrieves a list of all comments in the project.
+
+
+        Requires read_comments OAuth access scope.'
+      tags:
+      - Comments
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Number of items to include (max 5000).
+        required: false
+        example: '100'
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: Return results starting from this page.
+        required: false
+        example: '1'
+        schema:
+          type: integer
+      x-operation-id-source: normalized
+      x-operation-id-original: List project comments
+  /projects/{project_id}:{branch}/keys/{key_id}/comments:
+    get:
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Total-Count:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                comments:
+                - comment_id: 44444
+                  key_id: 12345
+                  comment: Hello, world!
+                  added_by: 420
+                  added_by_email: commenter@mycompany.com
+                  added_at: 2018-12-31 12:00:00 (Etc/UTC)
+                  added_at_timestamp: 1546257600
+                - comment_id: 44445
+                  key_id: 12345
+                  comment: Bye, world!
+                  added_by: 420
+                  added_by_email: commenter@mycompany.com
+                  added_at: 2018-12-31 12:00:00 (Etc/UTC)
+                  added_at_timestamp: 1546257600
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  comments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Comments'
+      summary: List key comments
+      operationId: ListKeyComments
+      description: 'Retrieves a list of all comments for a key.
+
+
+        Requires read_comments OAuth access scope.'
+      tags:
+      - Comments
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: key_id
+        in: path
+        description: A unique identifier of the key.
+        required: true
+        schema:
+          type: number
+      - name: limit
+        in: query
+        description: Number of items to include (max 5000).
+        required: false
+        example: '100'
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: Return results starting from this page.
+        required: false
+        example: '1'
+        schema:
+          type: integer
+      x-operation-id-source: normalized
+      x-operation-id-original: List key comments
+    post:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                comments:
+                - comment_id: 44444
+                  key_id: 12345
+                  comment: This is a test.
+                  added_by: 420
+                  added_by_email: commenter@mycompany.com
+                  added_at: 2018-12-31 12:00:00 (Etc/UTC)
+                  added_at_timestamp: 1546257600
+                - comment_id: 44445
+                  key_id: 12345
+                  comment: Adding multiple comments.
+                  added_by: 420
+                  added_by_email: commenter@mycompany.com
+                  added_at: 2018-12-31 12:00:00 (Etc/UTC)
+                  added_at_timestamp: 1546257600
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  comment:
+                    $ref: '#/components/schemas/Comments'
+      summary: Create comments
+      operationId: CreateComments
+      description: 'Adds a set of comments to the key.
+
+
+        Requires write_comments OAuth access scope.'
+      tags:
+      - Comments
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: key_id
+        in: path
+        description: A unique identifier of the key.
+        required: true
+        schema:
+          type: number
+      requestBody:
+        content:
+          application/json:
+            example:
+              comments:
+              - comment: This is a test.
+              - comment: Adding multiple comments.
+            schema:
+              type: object
+              properties:
+                comments:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - comment
+                    properties:
+                      comment:
+                        type: string
+                        description: The comment to add.
+                  description: A set of comments to add
+      x-operation-id-source: normalized
+      x-operation-id-original: Create comments
+  /projects/{project_id}:{branch}/keys/{key_id}/comments/{comment_id}:
+    get:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                comment:
+                  comment_id: 44444
+                  key_id: 12345
+                  comment: This is a test.
+                  added_by: 420
+                  added_by_email: commenter@mycompany.com
+                  added_at: 2018-12-31 12:00:00 (Etc/UTC)
+                  added_at_timestamp: 1546257600
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  comment:
+                    $ref: '#/components/schemas/Comments'
+      summary: Retrieve a comment
+      operationId: RetrieveAComment
+      description: 'Retrieves a Comment object.
+
+
+        Requires read_comments OAuth access scope.'
+      tags:
+      - Comments
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: key_id
+        in: path
+        description: A unique identifier of the key.
+        required: true
+        schema:
+          type: number
+      - name: comment_id
+        in: path
+        description: ' A unique identifier of the comment.'
+        required: true
+        schema:
+          type: number
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve a comment
+    delete:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  comment_deleted:
+                    type: boolean
+      summary: Delete a comment
+      operationId: DeleteAComment
+      description: 'Deletes a comment from the project. Authenticated user can only delete own comments.
+
+
+        Requires write_comments OAuth access scope.'
+      tags:
+      - Comments
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: key_id
+        in: path
+        description: A unique identifier of the key.
+        required: true
+        schema:
+          type: number
+      - name: comment_id
+        in: path
+        description: ' A unique identifier of the comment.'
+        required: true
+        schema:
+          type: number
+      x-operation-id-source: normalized
+      x-operation-id-original: Delete a comment
+components:
+  schemas:
+    Comments:
+      type: object
+      properties:
+        comment_id:
+          type: number
+          description: A unique identifier of the comment.
+        key_id:
+          type: number
+          description: Identifier of a key, the comment is attached to.
+        comment:
+          type: string
+          description: The comment message.
+        added_by:
+          type: number
+          description: Identifier of a user, who has left the comment.
+        added_by_email:
+          type: string
+          description: E-mail of a user, who has left the comment.
+        added_at:
+          type: string
+          description: Date and time the comment was added.
+        added_at_timestamp:
+          type: number
+          description: Unix timestamp the comment was added.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Token

@@ -1,24 +1,37 @@
 {
   "provider": "lokalise",
   "sources": [
-    "_original/lokalise-openapi.yml"
+    "_original/lokalise-openapi.json"
   ],
   "outputs": [
+    "lokalise-branches-api-openapi.yml",
+    "lokalise-comments-api-openapi.yml",
     "lokalise-files-api-openapi.yml",
     "lokalise-keys-api-openapi.yml",
-    "lokalise-projects-api-openapi.yml"
+    "lokalise-languages-api-openapi.yml",
+    "lokalise-projects-api-openapi.yml",
+    "lokalise-queued-processes-api-openapi.yml",
+    "lokalise-screenshots-api-openapi.yml",
+    "lokalise-tasks-api-openapi.yml",
+    "lokalise-translations-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
-    "lokalise-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "apis.yml register: already-registered"
+    "lokalise-openapi.json: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "lokalise-openapi.json: declared missing tag: Branches",
+    "lokalise-openapi.json: declared missing tag: Comments",
+    "lokalise-openapi.json: declared missing tag: Files",
+    "lokalise-openapi.json: declared missing tag: Keys",
+    "lokalise-openapi.json: declared missing tag: Languages",
+    "lokalise-openapi.json: declared missing tag: Projects",
+    "lokalise-openapi.json: declared missing tag: Queued Processes",
+    "lokalise-openapi.json: declared missing tag: Screenshots",
+    "lokalise-openapi.json: declared missing tag: Tasks",
+    "lokalise-openapi.json: declared missing tag: Translations",
+    "apis.yml register: written (+7 apis, 11 total)"
   ],
-  "skipped": [
-    "lokalise-files-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "lokalise-keys-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "lokalise-projects-api-openapi.yml: previously refined output, superseded by openapi/_original/"
-  ]
+  "skipped": []
 }

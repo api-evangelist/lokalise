@@ -1,0 +1,191 @@
+openapi: 3.2.0
+info:
+  title: Projects with branches Queued Processes API
+  version: 1.0.0
+  description: 'Describes the API for projects with branches.\n\n**Project Type Compatibility**: Branching is **only supported for Software projects** (localization_files). Documents and Marketing projects do not support branching. All endpoints in this documentation require Software projects with branching enabled.'
+servers:
+- url: https://api.lokalise.com/api2
+security:
+- ApiKeyAuth: []
+tags:
+- name: Queued Processes
+paths:
+  /projects/{project_id}:{branch}/processes:
+    get:
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Pagination-Total-Count:
+              schema:
+                type: string
+            X-Pagination-Page-Count:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                project_id: 767946315e9866d013c1d0.08299127
+                processes:
+                - process_id: 2e0559e60e856555fbc15bdf78ab2b0ca3406e8f
+                  type: file-import
+                  status: finished
+                  message: ''
+                  created_by: 1234
+                  created_by_email: example@example.com
+                  created_at: 2020-04-20 13:43:43 (Etc/UTC)
+                  created_at_timestamp: 1587390223
+                - process_id: f70bbf40059386a568d42c0f80297477e252cc48
+                  type: file-import
+                  status: finished
+                  message: ''
+                  created_by: 1234
+                  created_by_email: example@example.com
+                  created_at: 2020-04-20 13:48:00 (Etc/UTC)
+                  created_at_timestamp: 1587390480
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  processes:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/QueuedProcesses'
+      summary: List all processes
+      operationId: ListAllProcesses
+      description: 'Retrieves a list of Queued process objects.
+
+
+        Requires read_background_processes OAuth access scope.'
+      tags:
+      - Queued Processes
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Number of items to include (max 5000).
+        required: false
+        example: '100'
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: Return results starting from this page.
+        required: false
+        example: '1'
+        schema:
+          type: integer
+      x-operation-id-source: normalized
+      x-operation-id-original: List all processes
+  /projects/{project_id}:{branch}/processes/{process_id}:
+    get:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 767946315e9866d013c1d0.08299127
+                process:
+                  process_id: 2e0559e60e856555fbc15bdf78ab2b0ca3406e8f
+                  type: file-import
+                  status: finished
+                  message: ''
+                  created_by: 1234
+                  created_by_email: example@example.com
+                  created_at: 2020-04-20 13:43:43 (Etc/UTC)
+                  created_at_timestamp: 1587390223
+                  details:
+                    files:
+                    - status: finished
+                      message: ''
+                      name_original: index.json
+                      name_custom: index.json
+                      word_count_total: 2
+                      key_count_total: 1
+                      key_count_inserted: 0
+                      key_count_updated: 0
+                      key_count_skipped: 1
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  process:
+                    $ref: '#/components/schemas/QueuedProcesses'
+      summary: Retrieve a process
+      operationId: RetrieveAProcess
+      description: 'Retrieves a Queued process object with an additional details field containing information for a specific process type.
+
+
+        Requires read_background_processes OAuth access scope.'
+      tags:
+      - Queued Processes
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: process_id
+        in: path
+        description: A unique process identifier.
+        required: true
+        schema:
+          type: string
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve a process
+components:
+  schemas:
+    QueuedProcesses:
+      type: object
+      properties:
+        process_id:
+          type: string
+          description: A unique process identifier.
+        type:
+          type: string
+          description: The type of the process. Can be <code>file-import</code>, <code>sketch-import</code> or <code>bulk-apply-tm</code>.
+        status:
+          type: string
+          description: Current status of the process. Can be <code>queued</code>, <code>pre_processing</code>, <code>running</code>, <code>post_processing</code>, <code>cancelled</code>, <code>finished</code> or <code>failed</code>.
+        message:
+          type: string
+          description: Can contain a message related to the current process status (such as an error message).
+        created_by:
+          type: number
+          description: ID of a user who initiated the process.
+        created_by_email:
+          type: string
+          description: email of a user who initiated the process.
+        created_at:
+          type: string
+          description: Date of when the process was created in the queue.
+        created_at_timestamp:
+          type: number
+          description: Unix timestamp of when the process was created in the queue.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Token

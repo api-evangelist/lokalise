@@ -1,0 +1,1172 @@
+openapi: 3.2.0
+info:
+  title: Projects with branches Tasks API
+  version: 1.0.0
+  description: 'Describes the API for projects with branches.\n\n**Project Type Compatibility**: Branching is **only supported for Software projects** (localization_files). Documents and Marketing projects do not support branching. All endpoints in this documentation require Software projects with branching enabled.'
+servers:
+- url: https://api.lokalise.com/api2
+security:
+- ApiKeyAuth: []
+tags:
+- name: Tasks
+paths:
+  /projects/{project_id}:{branch}/tasks:
+    get:
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Total-Count:
+              schema:
+                type: string
+          content:
+            application/json:
+              example:
+                project_id: 20008339586cded200e0d8.29879849
+                tasks:
+                - task_id: 55392
+                  title: Voicemail messages
+                  can_be_parent: false
+                  task_type: translation
+                  parent_task_id: 12345
+                  closing_tags:
+                  - tag_one
+                  - tag_two
+                  do_lock_translations: false
+                  description: Need your help with some voicemail message translation. Thanks!
+                  status: in_progress
+                  progress: 25
+                  due_date: 2024-12-31 12:00:00 (Etc/UTC)
+                  due_date_timestamp: 1546257600
+                  keys_count: 3
+                  words_count: 91
+                  created_at: 2021-12-31 12:00:00 (Etc/UTC)
+                  created_at_timestamp: 1640944800
+                  created_by: 420
+                  created_by_email: manager@yourcompany.com
+                  languages:
+                  - language_iso: fi
+                    language_id: 610
+                    language_name: Finnish
+                    users:
+                    - user_id: 421
+                      email: jdoe@mycompany.com
+                      fullname: John Doe
+                    groups:
+                    - id: 191
+                      name: Voicemail translators
+                    keys:
+                    - 11212
+                    - 11241
+                    - 11245
+                    status: created
+                    progress: 0
+                    initial_tm_leverage:
+                      0%+: 91
+                      60%+: 0
+                      75%+: 0
+                      95%+: 0
+                      100%: 0
+                    tm_leverage:
+                      status: completed
+                      value:
+                        0%+: 30
+                        50%+: 0
+                        75%+: 0
+                        85%+: 0
+                        95%+: 0
+                        100%: 0
+                    keys_count: 3
+                    words_count: 91
+                    done_words_count: 0
+                    completed_at: null
+                    completed_at_timestamp: null
+                    completed_by: null
+                    completed_by_email: null
+                  - language_iso: ru
+                    language_id: 643
+                    language_name: Russian
+                    users:
+                    - user_id: 422
+                      email: jfox@mycompany.com
+                      fullname: James Fox
+                    groups: {}
+                    keys:
+                    - 11212
+                    - 11241
+                    - 11245
+                    status: in progress
+                    progress: 80
+                    initial_tm_leverage:
+                      0%+: 91
+                      60%+: 0
+                      75%+: 0
+                      95%+: 0
+                      100%: 0
+                    tm_leverage:
+                      status: completed
+                      value:
+                        0%+: 30
+                        50%+: 0
+                        75%+: 0
+                        85%+: 0
+                        95%+: 0
+                        100%: 0
+                    keys_count: 3
+                    words_count: 91
+                    done_words_count: 73
+                    completed_at: null
+                    completed_at_timestamp: null
+                    completed_by: null
+                    completed_by_email: null
+                  source_language_iso: en
+                  auto_close_languages: true
+                  auto_close_task: true
+                  auto_close_items: true
+                  completed_at: null
+                  completed_at_timestamp: null
+                  completed_by: null
+                  completed_by_email: null
+                  custom_translation_status_ids:
+                  - 77
+                  - 85
+                  - 86
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  tasks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Tasks'
+      summary: List all tasks
+      operationId: ListAllTasks
+      description: 'Lists all tasks in the project.
+
+
+        Requires read_tasks OAuth access scope.'
+      tags:
+      - Tasks
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: filter_title
+        in: query
+        description: Set title filter for the list.
+        required: false
+        schema:
+          type: string
+      - name: filter_statuses
+        in: query
+        description: 'One or more task statuses to filter by (comma separated). Possible values are <code>created</code>, <code>queued</code>, <code>in\_progress</code> and <code>completed</code>.
+
+          '
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Number of items to include (max 5000).
+        required: false
+        example: '100'
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: Return results starting from this page.
+        required: false
+        example: '1'
+        schema:
+          type: integer
+      x-operation-id-source: normalized
+      x-operation-id-original: List all tasks
+    post:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 20008339586cded200e0d8.29879849
+                task:
+                  task_id: 55392
+                  title: Voicemail messages
+                  description: Need your help with some voicemail message translation. Thanks!
+                  status: in_progress
+                  progress: 0
+                  can_be_parent: true
+                  task_type: review
+                  parent_task_id: 12345
+                  closing_tags:
+                  - tag_one
+                  - tag_two
+                  do_lock_translations: true
+                  due_date: 2024-12-31 12:00:00 (Etc/UTC)
+                  due_date_timestamp: 1546257600
+                  keys_count: 3
+                  words_count: 91
+                  created_at: 2021-12-31 12:00:00 (Etc/UTC)
+                  created_at_timestamp: 1640944800
+                  created_by: 420
+                  created_by_email: manager@yourcompany.com
+                  languages:
+                  - language_iso: fi
+                    language_id: 610
+                    language_name: Finnish
+                    users:
+                    - user_id: 421
+                      email: jdoe@mycompany.com
+                      fullname: John Doe
+                    groups: {}
+                    keys:
+                    - 11212
+                    - 11241
+                    - 11245
+                    status: created
+                    progress: 0
+                    initial_tm_leverage:
+                      0%+: 0
+                      60%+: 0
+                      75%+: 0
+                      95%+: 0
+                      100%: 0
+                    tm_leverage:
+                      status: completed
+                      value:
+                        0%+: 30
+                        50%+: 0
+                        75%+: 0
+                        85%+: 0
+                        95%+: 0
+                        100%: 0
+                    keys_count: 3
+                    words_count: 91
+                    done_words_count: 0
+                    completed_at: null
+                    completed_at_timestamp: null
+                    completed_by: null
+                    completed_by_email: null
+                  - language_iso: ru
+                    language_id: 643
+                    language_name: Russian
+                    users: {}
+                    groups:
+                    - id: 191
+                      name: Voicemail translators
+                    keys:
+                    - 11212
+                    - 11241
+                    - 11245
+                    status: in progress
+                    progress: 0
+                    initial_tm_leverage:
+                      0%+: 0
+                      60%+: 0
+                      75%+: 0
+                      95%+: 0
+                      100%: 0
+                    tm_leverage:
+                      status: completed
+                      value:
+                        0%+: 30
+                        50%+: 0
+                        75%+: 0
+                        85%+: 0
+                        95%+: 0
+                        100%: 0
+                    keys_count: 3
+                    words_count: 91
+                    done_words_count: 0
+                    completed_at: null
+                    completed_at_timestamp: null
+                    completed_by: null
+                    completed_by_email: null
+                  source_language_iso: en
+                  auto_close_languages: true
+                  auto_close_task: true
+                  auto_close_items: true
+                  completed_at: null
+                  completed_at_timestamp: null
+                  completed_by: null
+                  completed_by_email: null
+                  custom_translation_status_ids:
+                  - 77
+                  - 85
+                  - 86
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  task:
+                    $ref: '#/components/schemas/Tasks'
+                  skipped_languages:
+                    type: array
+                    description: Present only when some requested languages were ignored for AI tasks. Each entry describes an ignored language and the reason.
+                    items:
+                      type: object
+                      required:
+                      - language_iso
+                      - reason
+                      properties:
+                        language_iso:
+                          type: string
+                          description: Language code that was ignored.
+                        reason:
+                          type: string
+                          description: Reason why language was ignored.
+                        message:
+                          type: string
+                          description: Human-readable explanation.
+      summary: Create a task
+      operationId: CreateATask
+      description: 'Creates a task in the project. Requires *Manage tasks* admin right.
+
+        Keep in mind, that initial_tm_leverage attribute will be empty in server response. It''s being calculated after the task is created and this process may take some time.
+
+
+        Requires write_tasks OAuth access scope.'
+      tags:
+      - Tasks
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              title: Voicemail messages
+              description: Need your help with some voicemail message translation. Thanks!
+              due_date: '2024-12-31 12:00:00'
+              keys:
+              - 11212
+              - 11241
+              - 11245
+              languages:
+              - language_iso: fi
+                users:
+                - 421
+              - language_iso: ru
+                groups:
+                - 191
+              source_language_iso: en
+              auto_close_languages: true
+              auto_close_task: true
+              auto_close_items: true
+              task_type: translation
+              parent_task_id: 12345
+              closing_tags:
+              - tag_one
+              - tag_two
+              do_lock_translations: true
+              custom_translation_status_ids:
+              - 77
+              - 85
+              - 86
+            schema:
+              type: object
+              required:
+              - title
+              properties:
+                title:
+                  type: string
+                  description: Task title.
+                description:
+                  type: string
+                  description: Brief task description. Used as instructions for AI in <code>automatic_translation</code> and <code>lqa_by_ai</code> task types.
+                due_date:
+                  type: string
+                  description: 'Due date in <code>Y-m-d H:i:s</code> format. Example: "2024-12-24 23:59:59"'
+                keys:
+                  type: array
+                  items:
+                    type: string
+                  description: List of keys identifiers, included in task. Required if <code>parent_task_id</code> is not specified
+                languages:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - language_iso
+                    properties:
+                      language_iso:
+                        type: string
+                        description: Language code.
+                      users:
+                        type: array
+                        items:
+                          type: string
+                        description: List of user identifiers assigned to work on the language. **Must** be omitted for `automatic_translation` and `lqa_by_ai` task types.
+                      groups:
+                        type: array
+                        items:
+                          type: string
+                        description: List of user-group identifiers assigned to work on the language. **Must** be omitted for `automatic_translation` and `lqa_by_ai` task types.
+                  description: List of languages in the task. For <code>automatic_translation</code> and <code>lqa_by_ai</code> task types, unsupported languages will be ignored and returned in <code>skipped_languages</code> in the response.
+                source_language_iso:
+                  type: string
+                  description: Source language code for the task. Falls back to project base language if not provided.
+                auto_close_languages:
+                  type: boolean
+                  description: Whether languages should be closed automatically upon completion of the last item. **Must** be <code>true</code> or omit the property for `automatic_translation` and `lqa_by_ai` task types.
+                auto_close_task:
+                  type: boolean
+                  description: Whether the task should be automatically closed upon all language completion. **Must** be <code>true</code> or omit the property for `automatic_translation` and `lqa_by_ai` task types.
+                auto_close_items:
+                  type: boolean
+                  description: Whether the <code>translation</code> task items should be automatically marked as completed on edit. **Must** be <code>true</code> or omit the property for `automatic_translation` and `lqa_by_ai` task types.
+                task_type:
+                  type: string
+                  default: translation
+                  enum:
+                  - translation
+                  - automatic_translation
+                  - lqa_by_ai
+                  - review
+                  description: Specify if task type is <code>translation</code> (default), <code>automatic_translation</code>, <code>lqa_by_ai</code> or <code>review</code>.
+                parent_task_id:
+                  type: number
+                  description: If <code>task_type</code> is <code>review</code>, it can have a parent task. Current task will be opened when parent task is closed.
+                closing_tags:
+                  type: array
+                  items:
+                    type: string
+                  description: Tags that will be added to affected keys when task is closed.
+                do_lock_translations:
+                  type: boolean
+                  description: If set to true, will lock translations for non-assigned project members.
+                custom_translation_status_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: IDs of custom translation statuses that will be applied to task items after item is completed.
+                save_ai_translation_to_tm:
+                  type: boolean
+                  default: false
+                  description: Save AI translations to Translation Memory. Only applicable for tasks with <code>task_type</code> set to <code>automatic_translation</code>. Defaults to false.
+                apply_ai_tm100_matches:
+                  type: boolean
+                  default: false
+                  description: Apply 100% translation memory matches. Only applicable for tasks with <code>task_type</code> set to <code>automatic_translation</code>. Defaults to false.
+                mark_verified:
+                  type: boolean
+                  default: true
+                  description: Mark translations as verified. Only applicable for tasks with <code>task_type</code> set to <code>automatic_translation</code>. Defaults to true.
+                translate_all_segments:
+                  type: boolean
+                  default: false
+                  description: Translate all segments including those with existing translations or TM matches. Only applicable for tasks with <code>task_type</code> set to <code>automatic_translation</code> in projects with segmentation enabled. When false, only empty segments will be translated. This parameter can only be set during task creation and cannot be modified or retrieved afterwards. Defaults to false.
+                include_ai_score:
+                  type: boolean
+                  default: false
+                  description: Run AI scoring (LQA) on task translations once automatic translation completes. Only applicable for tasks with <code>task_type</code> set to <code>automatic_translation</code> and requires the AI scoring feature in your plan. Defaults to false.
+                translation_engine:
+                  type: string
+                  default: ai
+                  enum:
+                  - ai
+                  - deepl
+                  - google
+                  description: 'Engine that produces the automatic translations: <code>ai</code> (default), <code>deepl</code> or <code>google</code>. Only applicable for tasks with <code>task_type</code> set to <code>automatic_translation</code>; for every other task type the parameter should be omitted. The machine translation engines (<code>deepl</code>, <code>google</code>) cannot be combined with <code>save_ai_translation_to_tm</code> or <code>include_ai_score</code>. Unlike <code>ai</code>, which skips languages it cannot handle and reports them in <code>skipped_languages</code>, a machine translation engine rejects the whole request with a 400 error when it cannot translate one of the requested language pairs. This parameter can only be set during task creation and cannot be modified or retrieved afterwards.'
+      x-operation-id-source: normalized
+      x-operation-id-original: Create a task
+  /projects/{project_id}:{branch}/tasks/{task_id}/usage-metrics:
+    get:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                data:
+                  processed_words: 1542
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      processed_words:
+                        type: integer
+                        description: The number of processed words consumed by the given task.
+      summary: Retrieve task usage metrics
+      operationId: RetrieveTaskUsageMetrics
+      description: 'Retrieves usage metrics for a specific task. Data is available from November 3rd 2025 onwards.
+
+
+        Requires read_tasks OAuth access scope.'
+      tags:
+      - Tasks
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: task_id
+        in: path
+        description: A unique task identifier.
+        required: true
+        schema:
+          type: number
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve task usage metrics
+  /projects/{project_id}:{branch}/tasks/{task_id}:
+    get:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 20008339586cded200e0d8.29879849
+                task:
+                  task_id: 55392
+                  title: Voicemail messages
+                  description: Need your help with some voicemail message translation. Thanks!
+                  status: in_progress
+                  progress: 80
+                  can_be_parent: true
+                  task_type: review
+                  parent_task_id: 12345
+                  closing_tags:
+                  - tag_one
+                  - tag_two
+                  do_lock_translations: false
+                  due_date: 20242-12-31 12:00:00 (Etc/UTC)
+                  due_date_timestamp: 1546257600
+                  keys_count: 3
+                  words_count: 91
+                  created_at: 2021-12-31 12:00:00 (Etc/UTC)
+                  created_at_timestamp: 1640944800
+                  created_by: 420
+                  created_by_email: manager@yourcompany.com
+                  languages:
+                  - language_iso: fi
+                    language_id: 610
+                    language_name: Finnish
+                    users:
+                    - user_id: 421
+                      email: jdoe@mycompany.com
+                      fullname: John Doe
+                    groups:
+                    - id: 191
+                      name: Voicemail translators
+                    keys:
+                    - 11212
+                    - 11241
+                    - 11245
+                    status: created
+                    progress: 0
+                    initial_tm_leverage:
+                      0%+: 91
+                      60%+: 0
+                      75%+: 0
+                      95%+: 0
+                      100%: 0
+                    tm_leverage:
+                      status: completed
+                      value:
+                        0%+: 30
+                        50%+: 0
+                        75%+: 0
+                        85%+: 0
+                        95%+: 0
+                        100%: 0
+                    keys_count: 3
+                    words_count: 91
+                    done_words_count: 0
+                    completed_at: null
+                    completed_at_timestamp: null
+                    completed_by: null
+                    completed_by_email: null
+                  - language_iso: ru
+                    language_id: 643
+                    language_name: Russian
+                    users:
+                    - user_id: 422
+                      email: jfox@mycompany.com
+                      fullname: James Fox
+                    groups:
+                    - id: 191
+                      name: Voicemail translators
+                    keys:
+                    - 11212
+                    - 11241
+                    - 11245
+                    status: in progress
+                    progress: 90
+                    initial_tm_leverage:
+                      0%+: 60
+                      60%+: 0
+                      75%+: 31
+                      95%+: 0
+                      100%: 0
+                    tm_leverage:
+                      status: completed
+                      value:
+                        0%+: 30
+                        50%+: 0
+                        75%+: 0
+                        85%+: 0
+                        95%+: 0
+                        100%: 0
+                    keys_count: 3
+                    words_count: 91
+                    done_words_count: 82
+                    completed_at: null
+                    completed_at_timestamp: null
+                    completed_by: null
+                    completed_by_email: null
+                  source_language_iso: en
+                  auto_close_languages: true
+                  auto_close_task: true
+                  auto_close_items: true
+                  completed_at: null
+                  completed_at_timestamp: null
+                  completed_by: null
+                  completed_by_email: null
+                  custom_translation_status_ids:
+                  - 77
+                  - 85
+                  - 86
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  task:
+                    $ref: '#/components/schemas/Tasks'
+      summary: Retrieve a task
+      operationId: RetrieveATask
+      description: 'Retrieves a Task object.
+
+
+        Requires read_tasks OAuth access scope.'
+      tags:
+      - Tasks
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: task_id
+        in: path
+        description: A unique task identifier.
+        required: true
+        schema:
+          type: number
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve a task
+    put:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 20008339586cded200e0d8.29879849
+                task:
+                  task_id: 55392
+                  title: Voicemail messages
+                  description: Need your help with some voicemail message translation. Thanks!
+                  status: in_progress
+                  progress: 40
+                  can_be_parent: true
+                  task_type: translation
+                  parent_task_id: 12345
+                  closing_tags:
+                  - tag_one
+                  - tag_two
+                  do_lock_translations: false
+                  due_date: 2024-12-31 12:00:00 (Etc/UTC)
+                  due_date_timestamp: 1546257600
+                  keys_count: 3
+                  words_count: 91
+                  created_at: 2021-12-31 12:00:00 (Etc/UTC)
+                  created_at_timestamp: 1640944800
+                  created_by: 420
+                  created_by_email: manager@yourcompany.com
+                  languages:
+                  - language_iso: fi
+                    language_id: 610
+                    language_name: Finnish
+                    users:
+                    - user_id: 421
+                      email: jdoe@mycompany.com
+                      fullname: John Doe
+                    groups:
+                    - id: 191
+                      name: Voicemail translators
+                    keys:
+                    - 11212
+                    - 11241
+                    - 11245
+                    status: created
+                    progress: 0
+                    initial_tm_leverage:
+                      0%+: 0
+                      60%+: 31
+                      75%+: 60
+                      95%+: 0
+                      100%: 0
+                    tm_leverage:
+                      status: pending
+                      value: null
+                    keys_count: 3
+                    words_count: 91
+                    done_words_count: 0
+                    completed_at: null
+                    completed_at_timestamp: null
+                    completed_by: null
+                    completed_by_email: null
+                  - language_iso: ru
+                    language_id: 643
+                    language_name: Russian
+                    users:
+                    - user_id: 422
+                      email: jfox@mycompany.com
+                      fullname: James Fox
+                    groups: {}
+                    keys:
+                    - 11212
+                    - 11241
+                    - 11245
+                    status: in progress
+                    progress: 90
+                    initial_tm_leverage:
+                      0%+: 91
+                      60%+: 0
+                      75%+: 0
+                      95%+: 0
+                      100%: 0
+                    tm_leverage:
+                      status: completed
+                      value:
+                        0%+: 30
+                        50%+: 0
+                        75%+: 0
+                        85%+: 0
+                        95%+: 0
+                        100%: 0
+                    keys_count: 3
+                    words_count: 91
+                    done_words_count: 82
+                    completed_at: null
+                    completed_at_timestamp: null
+                    completed_by: null
+                    completed_by_email: null
+                  source_language_iso: en
+                  auto_close_languages: false
+                  auto_close_task: false
+                  completed_at: null
+                  completed_at_timestamp: null
+                  completed_by: null
+                  completed_by_email: null
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  task:
+                    $ref: '#/components/schemas/Tasks'
+      summary: Update a task
+      operationId: UpdateATask
+      description: 'Updates the properties of a task. Requires *Manage tasks* admin right.
+
+
+        Requires write_tasks OAuth access scope.'
+      tags:
+      - Tasks
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: task_id
+        in: path
+        description: A unique task identifier.
+        required: true
+        schema:
+          type: number
+      requestBody:
+        content:
+          application/json:
+            example:
+              due_date: '2024-12-31 12:00:00'
+              auto_close_languages: false
+              auto_close_task: false
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Task title.
+                description:
+                  type: string
+                  description: Brief task description. Used as instructions for AI in <code>automatic_translation</code> and <code>lqa_by_ai</code> task types.
+                due_date:
+                  type: string
+                  description: 'Due date in <code>Y-m-d H:i:s</code> format. Example: "2024-12-24 23:59:59"'
+                languages:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      language_iso:
+                        type: string
+                        description: Language code.
+                      users:
+                        type: array
+                        items:
+                          type: string
+                        description: List of user identifiers, assigned to work on the language.
+                      groups:
+                        type: array
+                        items:
+                          type: string
+                        description: List of group identifiers, assigned to work on the language.
+                      close_language:
+                        type: boolean
+                        description: Whether the language should be closed and notifications sent. Action cannot be undone.
+                  description: List of languages in the task. This field **must** be omitted for <code>automatic_translation</code> and <code>lqa_by_ai</code> task types.
+                auto_close_languages:
+                  type: boolean
+                  description: Whether languages should be closed automatically upon completion of the last item. **Must** be <code>true</code> or omit the property for `automatic_translation` and `lqa_by_ai` task types.
+                auto_close_task:
+                  type: boolean
+                  description: Whether the task should be automatically closed upon all language completion. **Must** be <code>true</code> or omit the property for `automatic_translation` and `lqa_by_ai` task types.
+                auto_close_items:
+                  type: boolean
+                  description: Whether the <code>translation</code> task items should be automatically marked as completed on edit. **Must** be <code>true</code> or omit the property for `automatic_translation` and `lqa_by_ai` task types.
+                close_task:
+                  type: boolean
+                  description: Whether the task should be closed and notifications sent. The task cannot be reopened again.
+                closing_tags:
+                  type: array
+                  items:
+                    type: string
+                  description: Tags that will be added to affected keys when task is closed.
+                do_lock_translations:
+                  type: boolean
+                  description: If set to true, will lock translations for non-assigned project members.
+      x-operation-id-source: normalized
+      x-operation-id-original: Update a task
+    delete:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                task_deleted: true
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  task_deleted:
+                    type: boolean
+      summary: Delete a task
+      operationId: DeleteATask
+      description: 'Deletes a task from the project. Requires *Manage tasks* admin right.
+
+
+        Requires write_tasks OAuth access scope.'
+      tags:
+      - Tasks
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: task_id
+        in: path
+        description: A unique task identifier.
+        required: true
+        schema:
+          type: number
+      x-operation-id-source: normalized
+      x-operation-id-original: Delete a task
+components:
+  schemas:
+    Tasks:
+      type: object
+      properties:
+        task_id:
+          type: number
+          description: A unique task identifier.
+        title:
+          type: string
+          description: Task title.
+        description:
+          type: string
+          description: Short description of the task.
+        status:
+          type: string
+          description: Status of the task. Allowed values are <code>completed</code>, <code>in_progress</code>, <code>created</code>, <code>queued</code>.
+        progress:
+          type: number
+          description: Task progress in percents (0% - 100%).
+        due_date:
+          type: string
+          description: Due date.
+        due_date_timestamp:
+          type: number
+          description: Unix timestamp of the Due date.
+        keys_count:
+          type: number
+          description: Total number of keys in the task.
+        words_count:
+          type: number
+          description: Total number of source words in the task.
+        created_at:
+          type: string
+          description: Date and time of the task creation.
+        created_at_timestamp:
+          type: number
+          description: Unix timestamp when the task was created.
+        created_by:
+          type: number
+          description: Identifier of a user, who has created the task.
+        created_by_email:
+          type: string
+          description: E-mail of a user, who has created the task.
+        can_be_parent:
+          type: boolean
+          description: Can task be assigned as a parent task.
+        task_type:
+          type: string
+          default: translation
+          enum:
+          - translation
+          - automatic_translation
+          - lqa_by_ai
+          - review
+          description: <code>translation</code>, <code>automatic_translation</code>, <code>lqa_by_ai</code> or <code>review</code>.
+        parent_task_id:
+          type: number
+          description: ID of the parent task.
+        closing_tags:
+          type: array
+          items: {}
+          description: Tags that will be added to affected keys when task is closed.
+        do_lock_translations:
+          type: boolean
+          description: If set to true, will lock translations for non-assigned project members.
+        languages:
+          type: array
+          items:
+            type: object
+            properties:
+              language_iso:
+                type: string
+                description: Language code.
+              language_id:
+                type: number
+                description: A unique language identifier in the system.
+              language_name:
+                type: string
+                description: Language name.
+              users:
+                type: array
+                items: {}
+                description: List of users, assigned to work on the language.
+              groups:
+                type: object
+                properties:
+                  group:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        description: A unique identifier of the user group.
+                      name:
+                        type: string
+                        description: Name of the group.
+                description: List of groups, assigned to work on the language.
+              keys:
+                type: array
+                items: {}
+                description: List of keys identifiers, included in task for this language.
+              status:
+                type: string
+                description: Status of the language in the task. Allowed values are <code>completed</code>, <code>in progress</code>, <code>created</code>.
+              progress:
+                type: number
+                description: Language progress in percents (0% - 100%).
+              initial_tm_leverage:
+                type: object
+                deprecated: true
+                description: Deprecated. We return data for compatibility, but please, rely on "tm_leverage" instead.
+                properties:
+                  0%+:
+                    type: number
+                    description: Number of words with TM match from 0% to 60%.
+                  60%+:
+                    type: number
+                    description: Number of words with TM match from 60% to 75%.
+                  75%+:
+                    type: number
+                    description: Number of words with TM match from 75% to 95%.
+                  95%+:
+                    type: number
+                    description: Number of words with TM match from 95% to 100%.
+                  100%:
+                    type: number
+                    description: Number of words with TM 100% match.
+              tm_leverage:
+                type: object
+                description: Translation Memory leverage calculated for a task. It indicates how many words translators can fetch from the memory instead of translating everything from scratch. For large tasks it may take time to calculate TM leverage after the task creation. If the "status" is "pending", you will see null value and need to retrieve the data again (with a small delay).
+                example:
+                  status: completed
+                  value:
+                    0%+: 30
+                    50%+: 0
+                    75%+: 0
+                    85%+: 0
+                    95%+: 0
+                    100%: 0
+                properties:
+                  status:
+                    type: string
+                    enum:
+                    - pending
+                    - completed
+                    description: Status of the translation memory leverage.
+                  value:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      0%+:
+                        type: number
+                        description: Number of words with TM match from 0% to 50%.
+                      50%+:
+                        type: number
+                        description: Number of words with TM match from 50% to 75%.
+                      75%+:
+                        type: number
+                        description: Number of words with TM match from 75% to 85%.
+                      85%+:
+                        type: number
+                        description: Number of words with TM match from 85% to 95%.
+                      95%+:
+                        type: number
+                        description: Number of words with TM match from 95% to 100%.
+                      100%:
+                        type: number
+                        description: Number of words with TM 100% match.
+              keys_count:
+                type: number
+                description: Number of keys for the language.
+              words_count:
+                type: number
+                description: Number of source words for the language.
+              done_words_count:
+                type: number
+                description: Number of translated words for the language.
+              completed_at:
+                type: string
+                description: Date and time of the language completion.
+              completed_at_timestamp:
+                type: number
+                description: Unix timestamp when the language was completed.
+              completed_by:
+                type: number
+                description: Identifier of a user, who has completed the language.
+              completed_by_email:
+                type: string
+                description: E-mail of a user, who has completed the language.
+          description: List of languages in the task.
+        source_language_iso:
+          type: string
+          description: Source language code of the task.
+        auto_close_languages:
+          type: boolean
+          description: Whether languages should be closed automatically upon completion of the last item.
+        auto_close_task:
+          type: boolean
+          description: Whether the task should be automatically closed upon all language completion.
+        auto_close_items:
+          type: boolean
+          description: Whether the <code>translation</code> task items should be automatically marked as completed on edit.
+        completed_at:
+          type: string
+          description: Date and time of the task completion.
+        completed_at_timestamp:
+          type: number
+          description: Unix timestamp when the task was completed.
+        completed_by:
+          type: number
+          description: Identifier of a user, who has completed the task.
+        completed_by_email:
+          type: string
+          description: E-mail of a user, who has completed the task.
+        custom_translation_status_ids:
+          type: array
+          items: {}
+          description: IDs of custom translation statuses that will be applied to task items after item is completed.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Token

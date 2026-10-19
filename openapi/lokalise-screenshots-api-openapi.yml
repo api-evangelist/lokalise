@@ -1,0 +1,151 @@
+openapi: 3.2.0
+info:
+  title: Projects with branches Screenshots API
+  version: 1.0.0
+  description: 'Describes the API for projects with branches.\n\n**Project Type Compatibility**: Branching is **only supported for Software projects** (localization_files). Documents and Marketing projects do not support branching. All endpoints in this documentation require Software projects with branching enabled.'
+servers:
+- url: https://api.lokalise.com/api2
+security:
+- ApiKeyAuth: []
+tags:
+- name: Screenshots
+paths:
+  /projects/{project_id}:{branch}/screenshots/{screenshot_id}:
+    put:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  screenshot:
+                    $ref: '#/components/schemas/Screenshots'
+      summary: Update a screenshot
+      operationId: UpdateAScreenshot
+      description: 'Updates the properties of a screenshot. Requires *Manage screenshots* admin right.
+
+
+        Requires write_screenshots OAuth access scope.'
+      tags:
+      - Screenshots
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: screenshot_id
+        in: path
+        description: A unique identifier of the screenshot.
+        required: true
+        schema:
+          type: number
+      requestBody:
+        content:
+          application/json:
+            example:
+              key_ids:
+              - 1132290
+              - 1132292
+              tags:
+              - main
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Set screenshot title (optional).
+                description:
+                  type: string
+                  description: Set screenshot description.
+                key_ids:
+                  type: array
+                  items:
+                    type: string
+                  description:  Attach the screenshot to key IDs specified.
+                tags:
+                  type: array
+                  items:
+                    type: string
+                  description: List of tags to add to the uploaded screenshot.
+      x-operation-id-source: normalized
+      x-operation-id-original: Update a screenshot
+components:
+  schemas:
+    Screenshots:
+      type: object
+      properties:
+        screenshot_id:
+          type: number
+          description: A unique identifier of the screenshot.
+        key_ids:
+          type: array
+          items: {}
+          description: List of key identifiers, the screenshot is attached to.
+        keys:
+          type: array
+          items:
+            type: object
+            properties:
+              key_id:
+                type: number
+                description: A unique identifier of the key.
+              coordinates:
+                type: object
+                properties:
+                  left:
+                    type: number
+                    description: <code>x</code> position of the left-top corner
+                  top:
+                    type: number
+                    description: <code>y</code> position of the left-top corner
+                  width:
+                    type: number
+                    description: width (pixels) of the area
+                  height:
+                    type: number
+                    description: height (pixels) of the area
+                description: Key coordinates of the key area
+          description: List of key keys with coordinates.
+        url:
+          type: string
+          description: Link to the screenshot.
+        title:
+          type: string
+          description: Screenshot title.
+        description:
+          type: string
+          description: Description of the screenshot.
+        screenshot_tags:
+          type: array
+          items: {}
+          description: List of screenshot tags.
+        width:
+          type: number
+          description: Width of the screenshot, in pixels.
+        height:
+          type: number
+          description: Height of the screenshot, in pixels.
+        created_at:
+          type: string
+          description: Creation date of the screenshot.
+        created_at_timestamp:
+          type: number
+          description: Unix timestamp when the screenshot was created.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Token

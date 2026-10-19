@@ -1,0 +1,414 @@
+openapi: 3.2.0
+info:
+  title: Projects with branches Translations API
+  version: 1.0.0
+  description: 'Describes the API for projects with branches.\n\n**Project Type Compatibility**: Branching is **only supported for Software projects** (localization_files). Documents and Marketing projects do not support branching. All endpoints in this documentation require Software projects with branching enabled.'
+servers:
+- url: https://api.lokalise.com/api2
+security:
+- ApiKeyAuth: []
+tags:
+- name: Translations
+paths:
+  /projects/{project_id}:{branch}/translations:
+    get:
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Total-Count:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  translations:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Translations'
+      summary: List all translations
+      operationId: ListAllTranslations
+      description: 'Retrieves a list of project translation items, ungrouped. This endpoint supports cursor pagination for better performance with large datasets. When using cursor pagination, the response will include a nextCursor value in the response headers when more data is available. Continue making requests with the nextCursor value until no nextCursor is returned, indicating all data has been retrieved.
+
+
+        You may want to request Keys resource in order to get the structured key/translation pairs for all languages.
+
+
+        Requires read_translations OAuth access scope.'
+      tags:
+      - Translations
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: disable_references
+        in: query
+        description: Whether to disable key references. Possible values are <code>1</code> and <code>0</code>.
+        required: false
+        example: '0'
+        schema:
+          type: number
+          enum:
+          - '0'
+          - '1'
+      - name: include_ai_scoring
+        in: query
+        description: Whether to include AI scoring (LQA) results as an <code>ai_scoring</code> object on each translation. Possible values are <code>1</code> and <code>0</code>. The object is <code>null</code> when no score is stored for the translation. Scores are produced by the AI scoring feature (for example an automatic translation task with <code>include_ai_score</code>) and are a signal for human review, not a final quality verdict.
+        required: false
+        example: '0'
+        schema:
+          type: number
+          enum:
+          - '0'
+          - '1'
+      - name: filter_lang_id
+        in: query
+        description: Return translations only for presented language ID.
+        required: false
+        schema:
+          type: number
+      - name: filter_is_reviewed
+        in: query
+        description: Filter translations which are reviewed. Possible values are <code>1</code> and <code>0</code>.
+        required: false
+        example: '0'
+        schema:
+          type: number
+          enum:
+          - '0'
+          - '1'
+      - name: filter_unverified
+        in: query
+        description: Filter translations which are unverified. Possible values are <code>1</code> and <code>0</code>.
+        required: false
+        example: '0'
+        schema:
+          type: number
+          enum:
+          - '0'
+          - '1'
+      - name: filter_untranslated
+        in: query
+        description: Filter by untranslated keys. Possible values are <code>1</code> and <code>0</code>.
+        required: false
+        example: '0'
+        schema:
+          type: number
+          enum:
+          - '0'
+          - '1'
+      - name: filter_qa_issues
+        in: query
+        description: One or more QA issues to filter by (comma separated). Possible values are <code>spelling\_and\_grammar</code>, <code>placeholders</code>, <code>html</code>, <code>url\_count</code>, <code>url</code>, <code>email\_count</code>, <code>email</code>, <code>brackets</code>, <code>numbers</code>, <code>leading\_whitespace</code>, <code>trailing\_whitespace</code>, <code>double\_space</code>, <code>special\_placeholder</code> and <code>unbalanced\_brackets</code>.
+        required: false
+        schema:
+          type: string
+      - name: filter_active_task_id
+        in: query
+        description: Filter translations which are part of given task ID.
+        required: false
+        schema:
+          type: number
+      - name: pagination
+        in: query
+        description: Type of pagination. Possible values are <code>offset</code> and <code>cursor</code>. The default value is <code>offset</code>. Cursor pagination is performance-optimized and does not count total records or calculate remaining pages. When using cursor pagination, continue making requests until no <code>nextCursor</code> is returned in the response headers.
+        required: false
+        example: offset
+        schema:
+          type: string
+          enum:
+          - offset
+          - cursor
+      - name: limit
+        in: query
+        description: Number of items to include (max 5000).
+        required: false
+        example: '100'
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: Return results starting from this page.
+        required: false
+        example: '1'
+        schema:
+          type: integer
+      - name: cursor
+        in: query
+        description: Return results starting from this cursor. When using cursor pagination, this parameter should contain the <code>nextCursor</code> value from the previous response. Continue pagination until no <code>nextCursor</code> is returned in the response headers.
+        required: false
+        schema:
+          type: string
+      x-operation-id-source: normalized
+      x-operation-id-original: List all translations
+  /projects/{project_id}:{branch}/translations/{translation_id}:
+    get:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                translation:
+                  translation_id: 344412
+                  key_id: 553662
+                  language_iso: en_US
+                  modified_at: 2018-12-31 12:00:00 (Etc/UTC)
+                  modified_at_timestamp: 1546257600
+                  modified_by: 420
+                  modified_by_email: user@mycompany.com
+                  translation: Hello, world!
+                  is_unverified: true
+                  is_reviewed: false
+                  reviewed_by: 0
+                  words: 2
+                  custom_translation_statuses: {}
+                  task_id: null
+                  segment_number: 1
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  translation:
+                    $ref: '#/components/schemas/Translations'
+      summary: Retrieve a translation
+      operationId: RetrieveATranslation
+      description: 'Retrieves a Translation object.
+
+
+        Requires read_translations OAuth access scope.'
+      tags:
+      - Translations
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: translation_id
+        in: path
+        description: Unique translation identifier.
+        required: true
+        schema:
+          type: number
+      - name: disable_references
+        in: query
+        description: Whether to disable key references. Possible values are <code>1</code> and <code>0</code>.
+        required: false
+        example: '0'
+        schema:
+          type: number
+          enum:
+          - '0'
+          - '1'
+      - name: include_ai_scoring
+        in: query
+        description: Whether to include AI scoring (LQA) results as an <code>ai_scoring</code> object on each translation. Possible values are <code>1</code> and <code>0</code>. The object is <code>null</code> when no score is stored for the translation. Scores are produced by the AI scoring feature (for example an automatic translation task with <code>include_ai_score</code>) and are a signal for human review, not a final quality verdict.
+        required: false
+        example: '0'
+        schema:
+          type: number
+          enum:
+          - '0'
+          - '1'
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve a translation
+    put:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                translation:
+                  translation_id: 344412
+                  key_id: 553662
+                  language_iso: en_US
+                  modified_at: 2018-12-31 12:00:00 (Etc/UTC)
+                  modified_at_timestamp: 1546257600
+                  modified_by: 420
+                  modified_by_email: user@mycompany.com
+                  translation: Quick brown fox jumps over the lazy dog.
+                  is_unverified: false
+                  is_reviewed: true
+                  reviewed_by: 1357
+                  words: 8
+                  custom_translation_statuses: {}
+                  task_id: null
+                  segment_number: 1
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  translation:
+                    $ref: '#/components/schemas/Translations'
+      summary: Update a translation
+      operationId: UpdateATranslation
+      description: 'Updates a translation. Alternatively, use the Multi-key update endpoint to update translations.
+
+
+        Requires write_translations OAuth access scope.'
+      tags:
+      - Translations
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      - name: translation_id
+        in: path
+        description: Unique translation identifier.
+        required: true
+        schema:
+          type: number
+      requestBody:
+        content:
+          application/json:
+            example:
+              translation: Quick brown fox jumps over the lazy dog.
+              is_unverified: false
+              is_reviewed: true
+            schema:
+              type: object
+              required:
+              - translation
+              properties:
+                translation:
+                  type: string
+                  description: The actual translation content. Use an JSON object for plural keys.
+                is_unverified:
+                  type: boolean
+                  description: Whether the Unverified flag is enabled.
+                is_reviewed:
+                  type: boolean
+                  description: Whether the Reviewed flag is enabled.
+                custom_translation_status_ids:
+                  type: array
+                  items:
+                    type: string
+                  description: Custom translation status IDs to assign to translation (existing statuses will be replaced).
+      x-operation-id-source: normalized
+      x-operation-id-original: Update a translation
+components:
+  schemas:
+    Translations:
+      type: object
+      properties:
+        translation_id:
+          type: number
+          description: Unique translation identifier.
+        key_id:
+          type: number
+          description: Identifier of the key of the translation.
+        language_iso:
+          type: string
+          description: Language code.
+        modified_at:
+          type: string
+          description: Date and time of last translation modification.
+        modified_at_timestamp:
+          type: number
+          description: Unix timestamp of last translation modification.
+        modified_by:
+          type: number
+          description: Identifier of the user, who made last modification.
+        modified_by_email:
+          type: string
+          description: E-mail of the user, who made last modification.
+        translation:
+          type: string
+          description: The actual translation content. Pass as an object, in case it includes plural forms and <code>is_plural</code> is <code>true</code>.
+        is_unverified:
+          type: boolean
+          description: Whether the Unverified flag is enabled.
+        is_reviewed:
+          type: boolean
+          description: Whether the Reviewed flag is enabled.
+        reviewed_by:
+          type: number
+          description: Identifier of the user, who has reviewed the translation (if reviewed).
+        words:
+          type: number
+          description: Number of words in the translation.
+        custom_translation_statuses:
+          type: array
+          items: {}
+          description: Array consisting of <a href="#object-translation-statuses">Custom Translation Status</a> objects.
+        task_id:
+          type: number
+          description: Identifier of the task, if the key is a part of one, or <code>null</code> if it's not.
+        segment_number:
+          type: number
+          description: If segmentation is used then this is a segment number. If not then it defaults to 1.
+        ai_scoring:
+          type:
+          - object
+          - 'null'
+          description: AI scoring (LQA) result. Returned only when <code>include_ai_scoring=1</code> is passed. <code>null</code> if no score is stored for the translation; stored scores are removed when the translation or its source text changes.
+          properties:
+            score:
+              type: number
+              description: 'Overall score from 0 to 100. Starts at 100 and adds the (negative) <code>penalty</code> of every issue, floored at 0: for example a major (-25) and a minor (-5) issue give 70. Intended as a signal for human review, not as a final quality verdict.'
+            last_updated:
+              type: string
+              description: Date and time the score was last generated.
+            last_updated_timestamp:
+              type: number
+              description: Unix timestamp of when the score was last generated.
+            issues:
+              type: array
+              description: Detected issues ordered by severity, most severe first.
+              items:
+                type: object
+                properties:
+                  category:
+                    type: string
+                    description: Issue category, one of <code>accuracy</code>, <code>fluency</code>, <code>terminology</code>, <code>style</code>, <code>verity</code>, <code>design</code>, <code>locale convention</code>, <code>other</code>.
+                  severity:
+                    type: string
+                    description: Issue severity, one of <code>critical</code>, <code>major</code>, <code>minor</code>, <code>neutral</code>.
+                  penalty:
+                    type: number
+                    description: Points subtracted from the score for this issue (<code>-75</code> critical, <code>-25</code> major, <code>-5</code> minor, <code>0</code> neutral).
+                  comment:
+                    type: string
+                    description: Explanation of the issue.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-Api-Token

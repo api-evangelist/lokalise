@@ -1,23 +1,10 @@
 openapi: 3.2.0
 info:
-  title: Lokalise API v2 Projects API
-  description: 'Lokalise REST API (APIv2) for the Lokalise translation management system.
-
-    Resources include projects, keys, translations, files, contributors,
-
-    languages, tasks, snapshots, branches, glossaries, webhooks, and orders.
-
-    Authentication is via API token in the `X-Api-Token` header (OAuth 2 also supported).'
-  version: '2.0'
-  contact:
-    name: Lokalise Developers
-    url: https://developers.lokalise.com/
-  license:
-    name: Proprietary
-    url: https://lokalise.com/legal/
+  title: branches Projects API
+  version: 1.0.0
+  description: 'Describes the API for projects with branches.\n\n**Project Type Compatibility**: Branching is **only supported for Software projects** (localization_files). Documents and Marketing projects do not support branching. All endpoints in this documentation require Software projects with branching enabled.'
 servers:
 - url: https://api.lokalise.com/api2
-  description: Lokalise API v2
 security:
 - ApiKeyAuth: []
 tags:
@@ -25,124 +12,650 @@ tags:
 paths:
   /projects:
     get:
+      responses:
+        '200':
+          description: OK
+          headers:
+            X-Total-Count:
+              schema:
+                type: string
+            X-Pagination-Next-Cursor:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  projects:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Projects'
+      summary: List all projects
+      operationId: ListAllProjects
+      description: 'Retrieves a list of projects available to the user, authorized with a token. This endpoint supports cursor pagination for better performance with large datasets. When using cursor pagination, the response will include a nextCursor value in the response headers when more data is available. Continue making requests with the nextCursor value until no nextCursor is returned, indicating all data has been retrieved. Note that cursor pagination returns projects in creation order rather than by name.
+
+
+        Requires read_projects OAuth access scope.'
       tags:
       - Projects
-      summary: List all projects
-      operationId: listProjects
       parameters:
       - name: filter_team_id
         in: query
+        description: Limit results to team ID.
+        required: false
         schema:
-          type: integer
+          type: number
       - name: filter_names
         in: query
+        description: One or more project names to filter by (comma separated).
+        required: false
         schema:
           type: string
       - name: include_statistics
         in: query
+        description: Whether to include project statistics. Possible values are <code>1</code> and <code>0</code>.
+        required: false
+        example: '1'
         schema:
-          type: integer
+          type: number
           enum:
-          - 0
-          - 1
+          - '0'
+          - '1'
       - name: include_settings
         in: query
+        description: Whether to include project settings. Possible values are <code>1</code> and <code>0</code>.
+        required: false
+        example: '1'
         schema:
-          type: integer
+          type: number
           enum:
-          - 0
-          - 1
+          - '0'
+          - '1'
+      - name: pagination
+        in: query
+        description: Type of pagination. Possible values are <code>offset</code> and <code>cursor</code>. The default value is <code>offset</code>. Cursor pagination is performance-optimized and does not count total records or calculate remaining pages. When using cursor pagination, continue making requests until no <code>nextCursor</code> is returned in the response headers.
+        required: false
+        example: offset
+        schema:
+          type: string
+          enum:
+          - offset
+          - cursor
       - name: limit
         in: query
+        description: Number of items to include (max 5000).
+        required: false
+        example: '100'
         schema:
           type: integer
       - name: page
         in: query
+        description: Return results starting from this page.
+        required: false
+        example: '1'
         schema:
           type: integer
+      - name: cursor
+        in: query
+        description: Return results starting from this cursor. When using cursor pagination, this parameter should contain the <code>nextCursor</code> value from the previous response. Continue pagination until no <code>nextCursor</code> is returned in the response headers.
+        required: false
+        schema:
+          type: string
+      x-operation-id-source: normalized
+      x-operation-id-original: List all projects
+    post:
       responses:
         '200':
-          description: A list of projects
+          description: OK
+          headers: {}
           content:
             application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                project_type: localization_files
+                name: TheApp Project
+                description: iOS + Android strings of TheApp. https://theapp.com
+                created_at: 2018-12-31 12:00:00 (Etc/UTC)
+                created_at_timestamp: 1546257600
+                created_by: 420
+                created_by_email: user@mycompany.com
+                team_id: 12345
+                base_language_id: 640
+                base_language_iso: en-us
+                settings:
+                  per_platform_key_names: false
+                  reviewing: false
+                  auto_toggle_unverified: true
+                  offline_translation: false
+                  key_editing: true
+                  inline_machine_translations: true
+                  custom_translation_statuses: true
+                  custom_translation_statuses_allow_multiple: false
+                  segmentation: false
+                  contributor_preview_download_enabled: false
+                statistics:
+                  progress_total: 0
+                  keys_total: 0
+                  team: 1
+                  base_words: 0
+                  qa_issues_total: 0
+                  qa_issues:
+                    not_reviewed: 0
+                    unverified: 0
+                    spelling_grammar: 0
+                    inconsistent_placeholders: 0
+                    inconsistent_html: 0
+                    different_number_of_urls: 0
+                    different_urls: 0
+                    leading_whitespace: 0
+                    trailing_whitespace: 0
+                    different_number_of_email_address: 0
+                    different_email_address: 0
+                    different_brackets: 0
+                    different_numbers: 0
+                    double_space: 1
+                    special_placeholder: 0
+                    unbalanced_brackets: 0
+                  languages:
+                  - language_id: 640
+                    language_iso: en-us
+                    progress: 0
+                    words_to_do: 0
+                  - language_id: 610
+                    language_iso: en-gb
+                    progress: 0
+                    words_to_do: 0
               schema:
-                type: object
-    post:
+                $ref: '#/components/schemas/Projects'
+      summary: Create a project
+      operationId: CreateAProject
+      description: 'Creates a new project in the specified team. Requires *Admin* role in the team.
+
+
+        Requires write_projects OAuth access scope.'
       tags:
       - Projects
-      summary: Create a project
-      operationId: createProject
+      parameters: []
       requestBody:
-        required: true
         content:
           application/json:
+            example:
+              name: TheApp Project
+              description: iOS + Android strings of TheApp. https://theapp.com
+              languages:
+              - lang_iso: en
+                custom_iso: en-us
+              - lang_iso: en_GB
+                custom_iso: en-gb
+              base_lang_iso: en-us
             schema:
               type: object
               required:
               - name
-              - team_id
               properties:
                 name:
                   type: string
+                  description: Name of the project.
                 team_id:
-                  type: integer
+                  type: number
+                  description: ID of the team to create a project in. If this parameter is omitted, the project will be created in current team of the user, whose API token is specified.
                 description:
                   type: string
+                  description: Description of the project.
                 languages:
                   type: array
                   items:
                     type: object
+                    required:
+                    - lang_iso
+                    properties:
+                      lang_iso:
+                        type: string
+                        description: A unique language code in the system.
+                      custom_iso:
+                        type: string
+                        description: Override language/locale code.
+                  description: List of languages to add.
                 base_lang_iso:
                   type: string
+                  description: Language/locale code of the project base language. Should be in a scope of <code>languages</code> list. Use <code>custom_iso</code> code in case it was defined.
                 project_type:
                   type: string
+                  description: 'Project type. **Note: Only <code>localization_files</code> projects support branching.** Available types:\n- <code>localization_files</code> - **Software projects** (Web and mobile) - Supports branching, individual key management, JWT/OTA tokens\n- <code>paged_documents</code> - **Documents projects** (Ad hoc documents) - ⚠️ *Branching not supported*\n- <code>content_integration</code> - **Marketing projects** (Marketing and support) - ⚠️ *Branching not supported*'
                   enum:
                   - localization_files
                   - paged_documents
                   - content_integration
-                  - marketing
-                  - marketing_integrations
                 is_segmentation_enabled:
                   type: boolean
-      responses:
-        '200':
-          description: The created project
-          content:
-            application/json:
-              schema:
-                type: object
+                  description: Enable Segmentation feature for project.
+      x-operation-id-source: normalized
+      x-operation-id-original: Create a project
   /projects/{project_id}:
-    parameters:
-    - name: project_id
-      in: path
-      required: true
-      schema:
-        type: string
     get:
-      tags:
-      - Projects
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                project_type: localization_files
+                name: TheApp Project
+                description: iOS + Android strings of TheApp. https://theapp.com
+                created_at: 2018-12-31 12:00:00 (Etc/UTC)
+                created_at_timestamp: 1546257600
+                created_by: 420
+                created_by_email: user@mycompany.com
+                team_id: 12345
+                base_language_id: 640
+                base_language_iso: en
+                settings:
+                  per_platform_key_names: false
+                  reviewing: false
+                  auto_toggle_unverified: true
+                  offline_translation: false
+                  key_editing: true
+                  inline_machine_translations: true
+                  custom_translation_statuses: true
+                  custom_translation_statuses_allow_multiple: false
+                  segmentation: false
+                  contributor_preview_download_enabled: false
+                statistics:
+                  progress_total: 87
+                  keys_total: 13
+                  team: 2
+                  base_words: 22
+                  qa_issues_total: 65
+                  qa_issues:
+                    not_reviewed: 39
+                    unverified: 7
+                    spelling_grammar: 4
+                    inconsistent_placeholders: 5
+                    inconsistent_html: 1
+                    different_number_of_urls: 0
+                    different_urls: 1
+                    leading_whitespace: 1
+                    trailing_whitespace: 0
+                    different_number_of_email_address: 0
+                    different_email_address: 0
+                    different_brackets: 6
+                    different_numbers: 1
+                    double_space: 1
+                    special_placeholder: 0
+                    unbalanced_brackets: 0
+                  languages:
+                  - language_id: 640
+                    language_iso: en
+                    progress: 100
+                    words_to_do: 0
+                  - language_id: 800
+                    language_iso: lv_LV
+                    progress: 100
+                    words_to_do: 0
+                  - language_id: 673
+                    language_iso: fr
+                    progress: 63
+                    words_to_do: 8
+              schema:
+                $ref: '#/components/schemas/Projects'
       summary: Retrieve a project
-      operationId: getProject
-      responses:
-        '200':
-          description: The project
-          content:
-            application/json:
-              schema:
-                type: object
-    delete:
+      operationId: RetrieveAProject
+      description: 'Retrieves a Project object.
+
+
+        Requires read_projects OAuth access scope.'
       tags:
       - Projects
-      summary: Delete a project
-      operationId: deleteProject
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      x-operation-id-source: normalized
+      x-operation-id-original: Retrieve a project
+    put:
       responses:
         '200':
-          description: Deletion confirmation
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                project_type: localization_files
+                name: TheApp Project
+                description: iOS + Android strings of TheApp. https://theapp.com
+                created_at: 2018-12-31 12:00:00 (Etc/UTC)
+                created_at_timestamp: 1546257600
+                created_by: 420
+                created_by_email: user@mycompany.com
+                team_id: 12345
+                base_language_id: 640
+                base_language_iso: en
+                settings:
+                  per_platform_key_names: false
+                  reviewing: false
+                  auto_toggle_unverified: true
+                  offline_translation: false
+                  key_editing: true
+                  inline_machine_translations: true
+                  custom_translation_statuses: true
+                  custom_translation_statuses_allow_multiple: false
+                  segmentation: false
+                  contributor_preview_download_enabled: false
+                statistics:
+                  progress_total: 87
+                  keys_total: 13
+                  team: 2
+                  base_words: 22
+                  qa_issues_total: 65
+                  qa_issues:
+                    not_reviewed: 39
+                    unverified: 7
+                    spelling_grammar: 4
+                    inconsistent_placeholders: 5
+                    inconsistent_html: 1
+                    different_number_of_urls: 0
+                    different_urls: 1
+                    leading_whitespace: 1
+                    trailing_whitespace: 0
+                    different_number_of_email_address: 0
+                    different_email_address: 0
+                    different_brackets: 6
+                    different_numbers: 1
+                    double_space: 1
+                    special_placeholder: 0
+                    unbalanced_brackets: 0
+                  languages:
+                  - language_id: 640
+                    language_iso: en
+                    progress: 100
+                    words_to_do: 0
+                  - language_id: 800
+                    language_iso: lv_LV
+                    progress: 100
+                    words_to_do: 0
+                  - language_id: 673
+                    language_iso: fr
+                    progress: 63
+                    words_to_do: 8
+              schema:
+                $ref: '#/components/schemas/Projects'
+      summary: Update a project
+      operationId: UpdateAProject
+      description: 'Updates the details of a project. Requires *Manage settings* admin right.
+
+
+        Requires write_projects OAuth access scope.'
+      tags:
+      - Projects
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            example:
+              name: TheZapp Project
+              description: iOS + Android strings of TheZapp. https://thezapp.com
+            schema:
+              type: object
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  description: Name of the project.
+                description:
+                  type: string
+                  description: Description of the project.
+      x-operation-id-source: normalized
+      x-operation-id-original: Update a project
+    delete:
+      responses:
+        '200':
+          description: OK
+          headers: {}
           content:
             application/json:
               schema:
                 type: object
+                properties:
+                  project_id:
+                    type: string
+                  project_deleted:
+                    type: boolean
+      summary: Delete a project
+      operationId: DeleteAProject
+      description: 'Deletes a project.
+
+
+        Requires write_projects OAuth access scope.'
+      tags:
+      - Projects
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      x-operation-id-source: normalized
+      x-operation-id-original: Delete a project
+  /projects/{project_id}:{branch}/empty:
+    put:
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              example:
+                project_id: 3002780358964f9bab5a92.87762498
+                keys_deleted: true
+              schema:
+                type: object
+                properties:
+                  project_id:
+                    type: string
+                  keys_deleted:
+                    type: boolean
+      summary: Empty a project
+      operationId: EmptyAProject
+      description: 'Deletes all keys and translations from the project. Requires *Manage settings* admin right.
+
+
+        Requires write_projects OAuth access scope.'
+      tags:
+      - Projects
+      parameters:
+      - name: project_id
+        in: path
+        description: A unique project identifier
+        required: true
+        schema:
+          type: string
+      - name: branch
+        in: path
+        description: Branch name
+        required: true
+        schema:
+          type: string
+      x-operation-id-source: normalized
+      x-operation-id-original: Empty a project
 components:
+  schemas:
+    Projects:
+      type: object
+      properties:
+        project_id:
+          type: string
+          description: A unique project identifier.
+        project_type:
+          type: string
+          description: Project type descriptor. Allowed values are <code>localization_files</code> or <code>paged_documents</code>.
+        name:
+          type: string
+          description: Project name.
+        description:
+          type: string
+          description: Description of the project.
+        created_at:
+          type: string
+          description: Date of project creation.
+        created_at_timestamp:
+          type: number
+          description: Unix timestamp when project was created.
+        created_by:
+          type: number
+          description: An identifier of a user who has created the project.
+        created_by_email:
+          type: string
+          description: An e-mail of a user who has created the project.
+        team_id:
+          type: number
+          description: A unique identifier of the team, the project belongs to.
+        base_language_id:
+          type: number
+          description: A unique identifier of the project default language.
+        base_language_iso:
+          type: string
+          description: A language/locale code of the project default language.
+        settings:
+          type: object
+          properties:
+            per_platform_key_names:
+              type: boolean
+              description: If enabled project has different key names for different platforms.
+            reviewing:
+              type: boolean
+              description: If enabled contributors has reviewer access for project.
+            auto_toggle_unverified:
+              type: boolean
+              description: If enabled Lokalise will automatically mark translations Unverified in case translation of base language was changed.
+            offline_translation:
+              type: boolean
+              description: If enabled translators are able to download and upload translations as XLIFF files from the Editor.
+            key_editing:
+              type: boolean
+              description: If enabled keys are allowed to be modified.
+            inline_machine_translations:
+              type: boolean
+              description: If enabled inline machine translations are enabled to all project users.
+            branching:
+              type: boolean
+              description: If enabled then branching will be available.
+            segmentation:
+              type: boolean
+              description: If enabled then segmentation will be available.
+            custom_translation_statuses:
+              type: boolean
+              description: If enabled then custom translation statuses will be available.
+            custom_translation_statuses_allow_multiple:
+              type: boolean
+              description: If enabled then multiple custom translation statuses will be allowed.
+            contributor_preview_download_enabled:
+              type: boolean
+              description: If enabled then translators will be allowed to preview content by downloading target files from the Editor
+          description: An object containing project settings.
+        statistics:
+          type: object
+          properties:
+            progress_total:
+              type: number
+              description: Overall percent of project progress.
+            keys_total:
+              type: number
+              description: Count of keys in the project.
+            team:
+              type: number
+              description: Team members count in the project.
+            base_words:
+              type: number
+              description: Count of words in a base language of the project.
+            qa_issues_total:
+              type: number
+              description: Overall count of QA issues in the project.
+            qa_issues:
+              type: object
+              properties:
+                not_reviewed:
+                  type: number
+                  description: Count of not reviewed translations.
+                unverified:
+                  type: number
+                  description: Count of unverified translations.
+                spelling_grammar:
+                  type: number
+                  description: Count of translations with spelling and/or grammar errors.
+                inconsistent_placeholders:
+                  type: number
+                  description: Count of translations with inconsistent placeholders (source vs target).
+                inconsistent_html:
+                  type: number
+                  description: Count of translations with inconsistent HTML tags (source vs target).
+                different_number_of_urls:
+                  type: number
+                  description: Count of translations with different number of URLs (source vs target).
+                different_urls:
+                  type: number
+                  description: Count of translations with different URLs (source vs target).
+                leading_whitespace:
+                  type: number
+                  description: Count of translations with leading whitespace.
+                trailing_whitespace:
+                  type: number
+                  description: Count of translations with trailing whitespace.
+                different_number_of_email_address:
+                  type: number
+                  description: Count of translations with different number of email address (source vs target).
+                different_email_address:
+                  type: number
+                  description: Count of translations with different email address (source vs target).
+                different_brackets:
+                  type: number
+                  description: Count of translations with different brackets (source vs target).
+                different_numbers:
+                  type: number
+                  description: Count of translations with different numbers (source vs target).
+                double_space:
+                  type: number
+                  description: Count of translations with double spaces (target).
+                special_placeholder:
+                  type: number
+                  description: Count of invalid use of [VOID], [TRUE], [FALSE] placeholders (target).
+                unbalanced_brackets:
+                  type: number
+                  description: Count of unbalanced brackets (target).
+              description: An object containing count for each QA issue type.
+            languages:
+              type: array
+              items:
+                type: object
+                properties:
+                  language_id:
+                    type: number
+                    description: A unique language identifier in the system.
+                  language_iso:
+                    type: string
+                    description: Language/locale code.
+                  progress:
+                    type: number
+                    description: Translated keys percent.
+                  words_to_do:
+                    type: number
+                    description: Count of words remaining to translate from projects base language.
+              description: An array of project languages with progress percent.
+          description: An object containing project statistics, QA issues and project languages progress.
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
