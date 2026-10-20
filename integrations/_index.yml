@@ -224,3 +224,283 @@
   relationship: platform-app
   status: not-a-workflow
   arazzo: null
+- slug: lokalise-moengage
+  label: MoEngage
+  partner: moengage
+  partner_name: MoEngage
+  category: content-management
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://lokalise.com/product/apps/content-management/moengage/
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: 'Lokalise apps (lokalise.com/product/apps cards: title + by)'
+    spec_file: null
+    role: lokalise-app
+    registered_name: MoEngage
+    matched_domain: moengage.com
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - MoEngage
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-localization.py
+    detected: '2026-10-20'
+    identity_source: wikidata Q140914206 'MoEngage' P856 https://www.moengage.com/ (wikidata P856, labelled provenance
+      step; Kin 2026-10-15 decision 1)
+  status: not-a-workflow
+  arazzo: null
+- slug: lokalise-adobe-xd
+  label: Adobe XD
+  partner: adobe
+  partner_name: Adobe XD
+  category: design-tools
+  type: marketplace
+  marketplace: own
+  channel: provider-built
+  evidence: https://lokalise.com/product/apps/design-tools/adobe-xd/
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: 'Lokalise apps (lokalise.com/product/apps cards: title + by)'
+    spec_file: null
+    role: lokalise-provider-built-app
+    registered_name: Lokalise
+    matched_domain: adobe.com
+    matched_by: domain+name-among-holders
+    listings: 1
+    sample_apps:
+    - Adobe XD
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-localization.py
+    detected: '2026-10-20'
+    identity_source: wikidata Q24060074 'Adobe XD' P856 http://www.adobe.com/products/xd.html (wikidata P856, labelled
+      provenance step; Kin 2026-10-15 decision 1)
+  status: not-a-workflow
+  arazzo: null
+- slug: lokalise-amazon-s3
+  label: Amazon S3
+  partner: amazon-s3
+  partner_name: Amazon S3
+  category: cloud-file-storage
+  type: marketplace
+  marketplace: own
+  channel: provider-built
+  evidence: https://lokalise.com/product/apps/cloud-file-storage/amazon-s3/
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: 'Lokalise apps (lokalise.com/product/apps cards: title + by)'
+    spec_file: null
+    role: lokalise-provider-built-app
+    registered_name: Lokalise
+    matched_domain: amazon.com
+    matched_by: domain+name-among-holders
+    listings: 1
+    sample_apps:
+    - Amazon S3
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-localization.py
+    detected: '2026-10-20'
+    identity_source: wikidata Q2593067 'Amazon S3' P856 https://aws.amazon.com/s3/ (wikidata P856, labelled provenance
+      step; Kin 2026-10-15 decision 1)
+  status: not-a-workflow
+  arazzo: null
+- slug: lokalise-contentful
+  label: Contentful
+  partner: contentful
+  partner_name: Contentful
+  category: content-management
+  type: marketplace
+  marketplace: own
+  channel: provider-built
+  evidence: https://lokalise.com/product/apps/content-management/contentful/
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: 'Lokalise apps (lokalise.com/product/apps cards: title + by)'
+    spec_file: null
+    role: lokalise-provider-built-app
+    registered_name: Lokalise
+    matched_domain: contentful.com
+    matched_by: domain+name-among-holders
+    listings: 1
+    sample_apps:
+    - Contentful
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-localization.py
+    detected: '2026-10-20'
+    identity_source: wikidata Q18348837 'Contentful' P856 https://www.contentful.com (wikidata P856, labelled provenance
+      step; Kin 2026-10-15 decision 1)
+  status: not-a-workflow
+  arazzo: null
+- slug: lokalise-figma
+  label: Figma
+  partner: figma
+  partner_name: Figma
+  category: design-tools
+  type: marketplace
+  marketplace: own
+  channel: provider-built
+  evidence: https://lokalise.com/product/apps/design-tools/figma/
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: 'Lokalise apps (lokalise.com/product/apps cards: title + by)'
+    spec_file: null
+    role: lokalise-provider-built-app
+    registered_name: Lokalise
+    matched_domain: figma.com
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - Figma
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-localization.py
+    detected: '2026-10-20'
+    identity_source: wikidata Q96186334 'Figma' P856 https://www.figma.com (wikidata P856, labelled provenance step;
+      Kin 2026-10-15 decision 1)
+  status: not-a-workflow
+  arazzo: null
+- slug: lokalise-sketch
+  label: Sketch
+  partner: sketch
+  partner_name: Sketch
+  category: design-tools
+  type: marketplace
+  marketplace: own
+  channel: provider-built
+  evidence: https://lokalise.com/product/apps/design-tools/sketch/
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: 'Lokalise apps (lokalise.com/product/apps cards: title + by)'
+    spec_file: null
+    role: lokalise-provider-built-app
+    registered_name: Lokalise
+    matched_domain: sketch.com
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - Sketch
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-localization.py
+    detected: '2026-10-20'
+    identity_source: wikidata Q22808097 'Sketch' P856 https://www.sketch.com (wikidata P856, labelled provenance
+      step; Kin 2026-10-15 decision 1)
+  status: not-a-workflow
+  arazzo: null
+- slug: lokalise-storyblok
+  label: Storyblok
+  partner: storyblok
+  partner_name: Storyblok
+  category: content-management
+  type: marketplace
+  marketplace: own
+  channel: provider-built
+  evidence: https://lokalise.com/product/apps/content-management/storyblok/
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: 'Lokalise apps (lokalise.com/product/apps cards: title + by)'
+    spec_file: null
+    role: lokalise-provider-built-app
+    registered_name: Lokalise
+    matched_domain: storyblok.com
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - Storyblok
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-localization.py
+    detected: '2026-10-20'
+    identity_source: wikidata Q132654610 'Storyblok' P856 https://www.storyblok.com/ (wikidata P856, labelled provenance
+      step; Kin 2026-10-15 decision 1)
+  status: not-a-workflow
+  arazzo: null
+- slug: lokalise-trello
+  label: Trello
+  partner: trello
+  partner_name: Trello
+  category: project-management
+  type: marketplace
+  marketplace: own
+  channel: provider-built
+  evidence: https://lokalise.com/product/apps/project-management/trello/
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: 'Lokalise apps (lokalise.com/product/apps cards: title + by)'
+    spec_file: null
+    role: lokalise-provider-built-app
+    registered_name: Lokalise
+    matched_domain: trello.com
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - Trello
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-localization.py
+    detected: '2026-10-20'
+    identity_source: wikidata Q7838011 'Trello' P856 https://trello.com/ (wikidata P856, labelled provenance step;
+      Kin 2026-10-15 decision 1)
+  status: not-a-workflow
+  arazzo: null
+- slug: lokalise-webflow
+  label: Webflow
+  partner: webflow
+  partner_name: Webflow
+  category: content-management
+  type: marketplace
+  marketplace: own
+  channel: provider-built
+  evidence: https://lokalise.com/product/apps/content-management/webflow/
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: 'Lokalise apps (lokalise.com/product/apps cards: title + by)'
+    spec_file: null
+    role: lokalise-provider-built-app
+    registered_name: Lokalise
+    matched_domain: webflow.com
+    matched_by: domain+name-among-holders
+    listings: 1
+    sample_apps:
+    - Webflow
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-localization.py
+    detected: '2026-10-20'
+    identity_source: wikidata Q20160951 'Webflow' P856 https://webflow.com (wikidata P856, labelled provenance step;
+      Kin 2026-10-15 decision 1)
+  status: not-a-workflow
+  arazzo: null
+- slug: lokalise-wordpress
+  label: Wordpress
+  partner: wordpress
+  partner_name: Wordpress
+  category: content-management
+  type: marketplace
+  marketplace: own
+  channel: provider-built
+  evidence: https://lokalise.com/product/apps/content-management/wordpress/
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: 'Lokalise apps (lokalise.com/product/apps cards: title + by)'
+    spec_file: null
+    role: lokalise-provider-built-app
+    registered_name: Lokalise
+    matched_domain: wordpress.org
+    matched_by: domain
+    listings: 1
+    sample_apps:
+    - Wordpress
+    signal_note: one edge per (builder, platform); listings and badges are context, never read
+    detected_by: sweep-localization.py
+    detected: '2026-10-20'
+    identity_source: wikidata Q13166 'WordPress' P856 https://wordpress.org (wikidata P856, labelled provenance
+      step; Kin 2026-10-15 decision 1)
+  status: not-a-workflow
+  arazzo: null
