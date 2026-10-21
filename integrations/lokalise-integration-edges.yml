@@ -19,6 +19,11 @@ checked:
 - storyblok/integrations/storyblok-integration-edges.yml
 - wordpress/integrations/wordpress-integration-edges.yml
 - zendesk/integrations/zendesk-integration-edges.yml
+- https://cdn.cocoapods.org/all_pods.txt
+- https://cert.appdefensealliance.org/certifications
+- https://play.google.com/sdks
+- https://search.maven.org/solrsearch/select
+- google-play/integrations/google-play-integration-edges.yml
 marketplace_apps:
 - marketplace: own
   channel: partner-built
@@ -191,105 +196,6 @@ edges:
     builder: Pipedream repo (component)
   detected_by: sweep-workflow-automation.py
   first_seen: '2026-10-15'
-- partner_name: Contentful (own)
-  partner: contentful
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://www.contentful.com/marketplace/lokalise/
-  mirror_of: contentful/integrations/contentful-integration-edges.yml
-  apps:
-  - Lokalise
-  listing_count: 1
-  detected: '2026-10-15'
-  detected_by: mirror-platform-listings.py
-- partner_name: Gorgias (own)
-  partner: gorgias
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://www.gorgias.com/apps/lokalise-messages
-  mirror_of: gorgias/integrations/gorgias-integration-edges.yml
-  apps:
-  - Lokalise Messages
-  listing_count: 1
-  detected: '2026-10-20'
-  detected_by: mirror-platform-listings.py
-- partner_name: Slack (own)
-  partner: slack
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://slack.com/marketplace/AMWGA5LPK-lokalise
-  mirror_of: slack/integrations/slack-integration-edges.yml
-  apps:
-  - Lokalise
-  listing_count: 1
-  detected: '2026-10-18'
-  detected_by: mirror-platform-listings.py
-  category: Slack app
-- partner_name: Storyblok (own)
-  partner: storyblok
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://www.storyblok.com/apps/external/lokalise
-  mirror_of: storyblok/integrations/storyblok-integration-edges.yml
-  apps:
-  - lokalise
-  listing_count: 1
-  detected: '2026-10-15'
-  detected_by: mirror-platform-listings.py
-- partner_name: WordPress (own)
-  partner: wordpress
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://wordpress.org/plugins/lokalise/
-  mirror_of: wordpress/integrations/wordpress-integration-edges.yml
-  apps:
-  - Lokalise Companion Plugin
-  listing_count: 1
-  detected: '2026-10-15'
-  detected_by: mirror-platform-listings.py
-  category: WordPress plugin
-- partner_name: Zendesk (own)
-  partner: zendesk
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://www.zendesk.com/marketplace/apps/support/210154/lokalise-messages-for-support/
-  mirror_of: zendesk/integrations/zendesk-integration-edges.yml
-  apps:
-  - Lokalise Messages for Support
-  listing_count: 1
-  detected: '2026-10-20'
-  detected_by: mirror-platform-listings.py
-  category: Translations
 - partner_name: MoEngage
   app: MoEngage
   partner: moengage
@@ -598,6 +504,152 @@ edges:
       Kin 2026-10-15 decision 1)
   detected_by: sweep-localization.py
   detected: '2026-10-20'
+- partner_name: CocoaPods trunk
+  partner: null
+  partner_match: register
+  type: register
+  channel: package-registry
+  relationship: distribution-channel
+  direction: provider-built
+  evidence: https://cocoapods.org/pods/Lokalise
+  category: iOS SDK (CocoaPods)
+  contract_reference:
+    register: CocoaPods trunk (cdn.cocoapods.org Specs; github.com/CocoaPods/Specs)
+    spec_file: null
+    role: cocoapods-publisher
+    registered_name: Fedya Levkin
+    matched_domain: lokalise.com
+    matched_by: domain
+    pods:
+    - pod: Lokalise
+      version: 1.0.2
+      homepage: https://lokalise.com
+      deprecated: false
+    - pod: LokaliseLiveEdit
+      version: 0.7.1
+      homepage: https://lokalise.com
+      deprecated: true
+    signal_note: latest podspec homepage (domain) + authors (name); pods, versions and counts are context
+    detected_by: sweep-mobile-sdk-index.py
+    detected: '2026-10-21'
+  detected_by: sweep-mobile-sdk-index.py
+  first_seen: '2026-10-21'
+- partner_name: Contentful (own)
+  partner: contentful
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.contentful.com/marketplace/lokalise/
+  mirror_of: contentful/integrations/contentful-integration-edges.yml
+  apps:
+  - Lokalise
+  listing_count: 1
+  detected: '2026-10-15'
+  detected_by: mirror-platform-listings.py
+- partner_name: Gorgias (own)
+  partner: gorgias
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.gorgias.com/apps/lokalise-messages
+  mirror_of: gorgias/integrations/gorgias-integration-edges.yml
+  apps:
+  - Lokalise Messages
+  listing_count: 1
+  detected: '2026-10-20'
+  detected_by: mirror-platform-listings.py
+- partner_name: Slack (own)
+  partner: slack
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://slack.com/marketplace/AMWGA5LPK-lokalise
+  mirror_of: slack/integrations/slack-integration-edges.yml
+  apps:
+  - Lokalise
+  listing_count: 1
+  detected: '2026-10-18'
+  detected_by: mirror-platform-listings.py
+  category: Slack app
+- partner_name: Storyblok (own)
+  partner: storyblok
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.storyblok.com/apps/external/lokalise
+  mirror_of: storyblok/integrations/storyblok-integration-edges.yml
+  apps:
+  - lokalise
+  listing_count: 1
+  detected: '2026-10-15'
+  detected_by: mirror-platform-listings.py
+- partner_name: WordPress (own)
+  partner: wordpress
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://wordpress.org/plugins/lokalise/
+  mirror_of: wordpress/integrations/wordpress-integration-edges.yml
+  apps:
+  - Lokalise Companion Plugin
+  listing_count: 1
+  detected: '2026-10-15'
+  detected_by: mirror-platform-listings.py
+  category: WordPress plugin
+- partner_name: Zendesk (own)
+  partner: zendesk
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.zendesk.com/marketplace/apps/support/210154/lokalise-messages-for-support/
+  mirror_of: zendesk/integrations/zendesk-integration-edges.yml
+  apps:
+  - Lokalise Messages for Support
+  listing_count: 1
+  detected: '2026-10-20'
+  detected_by: mirror-platform-listings.py
+  category: Translations
+- partner_name: Google Play Developer (Google Play SDK Index)
+  partner: google-play
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: Google Play SDK Index
+  evidence: https://play.google.com/sdks/details/com-lokalise-android-sdk
+  mirror_of: google-play/integrations/google-play-integration-edges.yml
+  apps:
+  - Lokalise
+  listing_count: 1
+  detected: '2026-10-21'
+  detected_by: mirror-platform-listings.py
+  category: mobile SDK (marketing-and-engagement)
 source:
 - https://github.com/marketplace?type=actions
 - https://marketplace.atlassian.com/
