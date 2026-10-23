@@ -591,3 +591,16 @@
   relationship: platform-app
   status: not-a-workflow
   arazzo: null
+- slug: lokalise-adobe-creative-cloud-own
+  label: Adobe Creative Cloud (own)
+  partner: adobe-creative-cloud
+  partner_name: Adobe Creative Cloud (own)
+  category: Adobe Exchange Creative Cloud listing (Express)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://exchange.adobe.com/apps/cc/02913ff1/lokalise
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null

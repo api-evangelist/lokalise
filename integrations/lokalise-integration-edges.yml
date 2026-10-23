@@ -28,6 +28,7 @@ checked:
 - https://packagist.org/packages
 - https://pub.dev/api
 - intercom/integrations/intercom-integration-edges.yml
+- adobe-creative-cloud/integrations/adobe-creative-cloud-integration-edges.yml
 marketplace_apps:
 - marketplace: own
   channel: partner-built
@@ -702,6 +703,23 @@ edges:
   detected: '2026-10-23'
   detected_by: mirror-platform-listings.py
   category: Knowledge sources
+- partner_name: Adobe Creative Cloud (own)
+  partner: adobe-creative-cloud
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://exchange.adobe.com/apps/cc/02913ff1/lokalise
+  mirror_of: adobe-creative-cloud/integrations/adobe-creative-cloud-integration-edges.yml
+  apps:
+  - Lokalise
+  listing_count: 1
+  detected: '2026-10-23'
+  detected_by: mirror-platform-listings.py
+  category: Adobe Exchange Creative Cloud listing (Express)
 source:
 - https://github.com/marketplace?type=actions
 - https://marketplace.atlassian.com/
