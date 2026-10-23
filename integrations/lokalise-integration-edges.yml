@@ -27,6 +27,7 @@ checked:
 - https://hex.pm/api
 - https://packagist.org/packages
 - https://pub.dev/api
+- intercom/integrations/intercom-integration-edges.yml
 marketplace_apps:
 - marketplace: own
   channel: partner-built
@@ -537,6 +538,36 @@ edges:
     detected: '2026-10-21'
   detected_by: sweep-mobile-sdk-index.py
   first_seen: '2026-10-21'
+- partner_name: pub.dev
+  partner: pub-dev
+  partner_match: register
+  type: register
+  direction: provider-built
+  category: official SDK (Dart/Flutter)
+  evidence: https://pub.dev/packages/lokalise_flutter_sdk
+  channel: package-registry
+  relationship: distribution-channel
+  contract_reference:
+    register: pub.dev (public registry JSON)
+    spec_file: null
+    language: Dart/Flutter
+    packages:
+    - name: lokalise_flutter_sdk
+      version: 3.2.0
+      released: '2026-07-29'
+      released_field: published
+      lapsed: false
+      page: https://pub.dev/packages/lokalise_flutter_sdk
+      repo_leg: not required (verified publisher)
+      publisher_leg: verified-publisher:lokalise.com
+      matched_by: domain
+    current: true
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-php-dart-elixir-package-registries.py
+    detected: '2026-10-22'
+  detected_by: sweep-php-dart-elixir-package-registries.py
+  first_seen: '2026-10-22'
 - partner_name: Contentful (own)
   partner: contentful
   partner_match: mirror
@@ -653,36 +684,24 @@ edges:
   detected: '2026-10-21'
   detected_by: mirror-platform-listings.py
   category: mobile SDK (marketing-and-engagement)
-- partner_name: pub.dev
-  partner: pub-dev
-  partner_match: register
-  type: register
-  direction: provider-built
-  category: official SDK (Dart/Flutter)
-  evidence: https://pub.dev/packages/lokalise_flutter_sdk
-  channel: package-registry
-  relationship: distribution-channel
-  contract_reference:
-    register: pub.dev (public registry JSON)
-    spec_file: null
-    language: Dart/Flutter
-    packages:
-    - name: lokalise_flutter_sdk
-      version: 3.2.0
-      released: '2026-07-29'
-      released_field: published
-      lapsed: false
-      page: https://pub.dev/packages/lokalise_flutter_sdk
-      repo_leg: not required (verified publisher)
-      publisher_leg: verified-publisher:lokalise.com
-      matched_by: domain
-    current: true
-    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
-      24 months'
-    detected_by: sweep-php-dart-elixir-package-registries.py
-    detected: '2026-10-22'
-  detected_by: sweep-php-dart-elixir-package-registries.py
-  first_seen: '2026-10-22'
+- partner_name: Intercom (own)
+  partner: intercom
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://www.intercom.com/app-store/?app_package_code=lokalise-for-articles
+  mirror_of: intercom/integrations/intercom-integration-edges.yml
+  apps:
+  - Lokalise for Articles
+  - Lokalise Messages for Inbox
+  listing_count: 1
+  detected: '2026-10-23'
+  detected_by: mirror-platform-listings.py
+  category: Knowledge sources
 source:
 - https://github.com/marketplace?type=actions
 - https://marketplace.atlassian.com/
