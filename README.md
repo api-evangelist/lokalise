@@ -1,4 +1,4 @@
-# Lokalise (lokalise)
+# Lokalise
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,71 +66,134 @@
 
 Lokalise is a translation management system (TMS) for software, mobile, web, games, and documentation. It pairs collaborative localization workflows with AI machine translation and a full-coverage REST API (APIv2) that exposes projects, keys, translations, files, contributors, screenshots, snapshots, tasks, branches, glossaries, webhooks, and payments. Official SDKs are maintained for Node.js, Python, Ruby, PHP, Go, Java, .NET, and Elixir.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/lokalise/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/lokalise/refs/heads/main/apis.yml)
+**Areas:** Localization · Translation · TMS · AI Machine Translation · REST · Developer Tools
 
-## Tags
+## Lokalise on APIs.io
 
-- Localization
-- Translation
-- TMS
-- AI Machine Translation
-- REST
-- Developer Tools
+Everything profiled for Lokalise is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/lokalise/](https://apis.io/providers/lokalise/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (4)
 
-- **Created:** 2026-05-23
-- **Modified:** 2026-05-23
+- [Lokalise API v2](https://apis.io/apis/lokalise/api-v2/) — Full-coverage REST API for the Lokalise TMS. Resources include projects, keys, translations, contributors, files, comments, screenshots, snapshots, teams,…
+- [Lokalise Files API](https://apis.io/apis/lokalise/lokalise-files-api/) — The Files API from Lokalise — 1 operation(s) for files.
+- [Lokalise Keys API](https://apis.io/apis/lokalise/lokalise-keys-api/) — The Keys API from Lokalise — 2 operation(s) for keys.
+- [Lokalise Projects API](https://apis.io/apis/lokalise/lokalise-projects-api/) — The Projects API from Lokalise — 2 operation(s) for projects.
 
-## APIs
+### Published properties
 
-### Lokalise API v2
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-Full-coverage REST API for the Lokalise TMS. Resources include projects, keys, translations, contributors, files, comments, screenshots, snapshots, teams, team users, team user groups, branches, languages, tasks, glossaries, webhooks, payments, and orders. Authentication is via API token in the X-Api-Token header or OAuth 2.
+#### GraphQL (1)
 
-- **Human URL:** [https://developers.lokalise.com/](https://developers.lokalise.com/)
-- **Base URL:** `https://api.lokalise.com/api2`
+GraphQL schemas.
 
-#### Tags
+- [Moved to /providers/lokalise/](https://apis.io/graphqls/lokalise/lokalise-graphql/)
 
-- REST
-- Projects
-- Keys
-- Translations
-- Files
-- Contributors
-- Screenshots
-- Webhooks
+#### MCP servers (1)
 
-#### Properties
+Model Context Protocol servers that expose the API to agents.
 
-- [Documentation](https://developers.lokalise.com/)
-- [Legacy Docs](https://docs.lokalise.com/en/articles/1400695-lokalise-api-v2)
-- [Blog](https://lokalise.com/blog/lokalise-api/)
-- [SDK](https://github.com/lokalise/node-lokalise-api)
-- [SDK](https://github.com/lokalise/python-lokalise-api)
-- [SDK](https://github.com/lokalise/ruby-lokalise-api)
-- [SDK](https://github.com/lokalise/php-lokalise-api)
-- [SDK](https://github.com/lokalise/go-lokalise-api)
-- [SDK](https://github.com/lokalise/java-lokalise-api)
-- [SDK](https://github.com/lokalise/dotnet-lokalise-api)
-- [SDK](https://github.com/lokalise/elixir-lokalise-api)
-- [Postman Collection](collections/lokalise.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/lokalise.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [lokalise](https://apis.io/servers/lokalise/lokalise/)
 
-## Common Properties
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Lokalise Agentic Access](https://apis.io/agentic-access/lokalise/lokalise-agentic-access/)
+
+#### Collections (4)
+
+Postman and Open Collection request collections.
+
+- [Lokalise API v2](https://apis.io/collections/lokalise/open-lokalise/)
+- [Lokalise API v2 Files API](https://apis.io/collections/lokalise/open-lokalise-files-api/)
+- [Lokalise API v2 Files Keys API](https://apis.io/collections/lokalise/open-lokalise-keys-api/)
+- [Lokalise API v2 Files Projects API](https://apis.io/collections/lokalise/open-lokalise-projects-api/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Lokalise Authentication](https://apis.io/security/lokalise/lokalise-authentication/)
+- [Lokalise Domain Security](https://apis.io/security/lokalise/lokalise-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Lokalise Plans Pricing](https://apis.io/plans/lokalise/lokalise-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Lokalise Rate Limits](https://apis.io/rate-limits/lokalise/lokalise-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Lokalise Finops](https://apis.io/finops/lokalise/lokalise-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://lokalise.com/)
 - [Documentation](https://developers.lokalise.com/)
 - [Blog](https://lokalise.com/blog/)
-- [Git Hub](https://github.com/lokalise)
-- [LinkedIn](https://www.linkedin.com/company/lokalise)
-- [Plans](plans/lokalise-plans-pricing.yml)
-- [Rate Limits](rate-limits/lokalise-rate-limits.yml)
-- [Fin Ops](finops/lokalise-finops.yml)
-- [L L Ms Txt](https://developers.lokalise.com/llms.txt)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 27.8** — thin · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.0 |
+| Contract quality | 47.6 |
+| Contract governance | 0.0 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 35.7 |
+| Access clarity | 5.3 |
+
+**Agent readiness 48.9** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 11.8** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/lokalise/](https://apis.io/providers/lokalise/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Lokalise: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/lokalise/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
